@@ -1,0 +1,1 @@
+npm install express mysql2 dotenv body-parser cookie-parser cors jsonwebtoken bcrypt multer nodemailer socket.io
