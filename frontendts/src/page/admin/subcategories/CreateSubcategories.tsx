@@ -5,7 +5,7 @@ import Button from '@/components/ui/custome/Button';
 import Input from '@/components/ui/custome/Input';
 import Select from '@/components/ui/custome/Select';
 import Loading from '@/components/ui/Loading';
-import TiptapEditor from '@/components/ui/TiptapEditor';
+import TipTapEditor from '@/components/ui/TipTapEditor.tsx';
 import { SET_ACTIVE_OPTIONS } from '@/constants/common';
 import type { Categories } from '@/types/category.type';
 import { useGetCategoriesQuery } from '../../../services/api/categoryApi';
@@ -94,7 +94,7 @@ const CreateSubcategories = () => {
             disabled={isLoading}
           />
 
-          <TiptapEditor
+          <TipTapEditor
             label="Mô tả danh mục con"
             name="descriptionVn"
             value={formData.descriptionVn}

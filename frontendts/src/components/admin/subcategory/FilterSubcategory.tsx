@@ -11,7 +11,7 @@ import type { Categories } from '@/types/category.type';
 import type { SubcategoryQuery } from '@/types/subcategory.type';
 import { RefreshCw, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { SORT_BY_OPTIONS, STATUS_OPTIONS } from '../../../constants/subCategoryConstants';
+import { SORT_BY_OPTIONS, STATUS_OPTIONS } from '../../../constants/subCategoryConstants.ts';
 
 interface FilterSubcategoryProps {
   query: SubcategoryQuery;

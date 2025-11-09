@@ -29,7 +29,7 @@ interface TiptapEditorProps {
   className?: string;
 }
 
-const TiptapEditor: React.FC<TiptapEditorProps> = ({
+const TipTapEditor: React.FC<TiptapEditorProps> = ({
   label = '',
   name = 'content',
   value = '',
@@ -212,4 +212,4 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({
   );
 };
 
-export default TiptapEditor;
+export default TipTapEditor;

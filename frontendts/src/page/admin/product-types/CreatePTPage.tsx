@@ -7,7 +7,7 @@ import Loading from '@/components/ui/Loading';
 import { SET_ACTIVE_OPTIONS } from '@/constants/common';
 import type { Subcategory } from "@/types/subcategory.type.ts";
 import { useGetSubcategoriesQuery } from "@/services/api/subcategoryApi.ts";
-import TiptapEditor from "@/components/ui/TiptapEditor.tsx";
+import TipTapEditor from "@/components/ui/TipTapEditor.tsx";
 
 const CreatePTPage = () => {
 	const { data, error, isLoading: loadingSubcategories } = useGetSubcategoriesQuery({});
@@ -71,7 +71,7 @@ const CreatePTPage = () => {
 						onChange={() => {}}
 						required
 					/>
-					<TiptapEditor
+					<TipTapEditor
 						label="Mô tả loại sản phẩm"
 						value=""
 						placeholder="Nhập mô tả loại sản phẩm..."

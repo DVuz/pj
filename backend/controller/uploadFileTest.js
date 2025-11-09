@@ -1,6 +1,6 @@
 const { successResponse, errorResponse } = require('../utils/response');
 const  validateImages  = require('../utils/validateImage');
-const uploadToCloudinary = require('../utils/uploadToCloudinary');
+const uploadToCloudinary = require('../utils/cloudinary/uploadToCloudinary');
 const CLOUDINARY_FOLDERS = require('../config/folderStucture');
 
 const uploadFile = async (req, res) => {

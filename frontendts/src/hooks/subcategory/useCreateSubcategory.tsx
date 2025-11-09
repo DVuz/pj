@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import type { ImageUploadRef } from '../../components/admin/ImageUpload';
 import type { SubcategoryFormData, SubcategoryFormErrors } from '@/types/subcategory.type';
-import { INITIAL_SUBCATEGORY_FORM_DATA } from '../../constants/subCategoryConstants';
+import { INITIAL_SUBCATEGORY_FORM_DATA } from '../../constants/subCategoryConstants.ts';
 import {
   hasValidationErrors,
   validateSubcategoryForm,

@@ -8,7 +8,7 @@ export const subcategoryApi = createApi({
     // Tạo mới subcategory (POST, có thể kèm file)
     createSubcategory: builder.mutation({
       query: formData => ({
-        url: '/subcategory/create',
+        url: '/subcategories/create',
         method: 'POST',
         body: formData,
       }),
@@ -20,7 +20,7 @@ export const subcategoryApi = createApi({
         console.log('Fetching subcategories with params:', params);
         console.log('Final URL:', `/subcategory${queryString}`);
         return {
-          url: `/subcategory${queryString}`,
+          url: `/subcategories${queryString}`,
           method: 'GET',
         };
       },

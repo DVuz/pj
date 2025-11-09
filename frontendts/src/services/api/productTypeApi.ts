@@ -8,7 +8,7 @@ export const productTypeApi = createApi({
     // Tạo mới product type (POST, có thể kèm file)
     createProductType: builder.mutation({
       query: formData => ({
-        url: '/producttype/create',
+        url: '/productTypes/create',
         method: 'POST',
         body: formData, // formData là instance của FormData
       }),
@@ -18,7 +18,7 @@ export const productTypeApi = createApi({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
         return {
-          url: `/producttype${queryString}`,
+          url: `/productTypes${queryString}`,
           method: 'GET',
         };
       },

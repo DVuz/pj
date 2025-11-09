@@ -8,7 +8,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
-import { STATUS_OPTIONS, SORT_BY_OPTIONS } from '@/constants/categoryConstants';
+import { STATUS_OPTIONS, SORT_BY_OPTIONS } from '@/constants/categoryConstants.ts';
 import type { CategoryQuery } from '@/types/category.type';
 
 interface FilterHeaderProps {

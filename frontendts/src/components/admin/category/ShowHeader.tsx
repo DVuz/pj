@@ -1,6 +1,6 @@
 import { Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { SORT_BY_OPTIONS, STATUS_OPTIONS } from '../../../constants/categoryConstants';
+import { SORT_BY_OPTIONS, STATUS_OPTIONS } from '../../../constants/categoryConstants.ts';
 
 import { Input } from '../../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';

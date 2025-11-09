@@ -1,7 +1,7 @@
 const {successResponse, errorResponse} = require('../../utils/response');
 const db = require('../../config/db.config');
 const validateImages = require('../../utils/validateImage');
-const uploadToCloudinary = require('../../utils/uploadToCloudinary');
+const uploadToCloudinary = require('../../utils/cloudinary/uploadToCloudinary');
 const CLOUDINARY_FOLDERS = require('../../config/folderStucture');
 const camelObjToSnakeObj = require('../../utils/camelToSnake');
 

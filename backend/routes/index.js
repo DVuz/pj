@@ -4,13 +4,16 @@ const test = require('./test');
 const auth = require('./auth');
 const category = require('./category.routes');
 const subcategory = require('./subcategory.routes');
-const producttype = require('./producttype.routes');
+const productType = require('./producttype.routes');
+const product = require('./product.routes');
 
-router.use('/producttype', producttype);
+router.use('/products', product);
 
-router.use('/subcategory', subcategory);
+router.use('/productTypes', productType);
 
-router.use('/category', category);
+router.use('/subcategories', subcategory);
+
+router.use('/categories', category);
 
 router.use('/test', test);
 

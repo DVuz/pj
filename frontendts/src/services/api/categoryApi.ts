@@ -8,7 +8,7 @@ export const categoryApi = createApi({
     // create category (POST, maybe with form data)
     createCategory: builder.mutation({
       query: formData => ({
-        url: '/category/create',
+        url: '/categories/create',
         method: 'POST',
         body: formData, // formData là instance của FormData
       }),
@@ -18,7 +18,7 @@ export const categoryApi = createApi({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
         return {
-          url: `/category${queryString}`,
+          url: `/categories${queryString}`,
           method: 'GET',
         };
       },
@@ -27,7 +27,7 @@ export const categoryApi = createApi({
     //get detail category by id
     getDetailCategoryById: builder.query({
       query: (id: number | string) => ({
-        url: `/category/${id}`,
+        url: `/categories/${id}`,
         method: 'GET',
       }),
     }),
