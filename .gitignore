@@ -48,6 +48,8 @@ frontend/.parcel-cache/
 frontend/dist/
 frontend/coverage/
 frontendts/src/routeTree.gen.ts
+frontendts/.tanstack/
+
 
 # === Express build or temp ===
 backend/dist/
