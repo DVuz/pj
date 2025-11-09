@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { SORT_BY_OPTIONS, STATUS_OPTIONS } from '../../../constants/categoryConstants';
-import type { SelectOption } from '../../../types/category.type';
+
 import { Input } from '../../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
 import { Label } from '../../ui/label';
@@ -20,56 +20,52 @@ interface ShowCategoryHeaderProps {
   onFiltersChange: (filters: CategoryFilters) => void;
 }
 
-// Options cho status với "Tất cả" option - sửa lại để tránh empty string
-const statusOptionsWithAll: SelectOption[] = [
-  { value: 'all', label: 'Tất cả trạng thái' }, // Thay đổi từ '' thành 'all'
-  ...STATUS_OPTIONS,
-];
+// Xóa dòng này: const statusOptionsWithAll: STATUS_OPTIONS
 
 const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange }) => {
   const [category_name_vn, setCategoryName] = useState<string>('');
   const [status, setStatus] = useState<string>('all'); // Đổi default từ '' thành 'all'
   const [sortBy, setSortBy] = useState<string>('');
-
+  
   // Sử dụng useRef để tránh re-render
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onFiltersChangeRef = useRef(onFiltersChange);
-
+  
   // Update ref khi prop thay đổi
   useEffect(() => {
     onFiltersChangeRef.current = onFiltersChange;
   }, [onFiltersChange]);
-
+  
   // Debounce function cho search
   const debouncedSendFilters = (filters: CategoryFilters) => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
-
+    
     debounceTimerRef.current = setTimeout(() => {
       if (onFiltersChangeRef.current) {
         onFiltersChangeRef.current(filters);
       }
     }, 500);
   };
-
+  
   // Gửi filters ngay lập tức (cho select)
   const sendFiltersImmediate = (filters: CategoryFilters) => {
     if (onFiltersChangeRef.current) {
       onFiltersChangeRef.current(filters);
     }
   };
-
+  
   // Build filters object
   const buildFilters = (
     overrides: Partial<CategoryFilters> & { sortBy?: string } = {}
   ): CategoryFilters => {
     const [sort_by, sort_order] = (overrides.sortBy ?? sortBy).split('|');
-
+    
     // Xử lý status để chuyển 'all' thành undefined (không filter)
     const statusValue = overrides.status !== undefined ? overrides.status : status;
     const processedStatus = statusValue === 'all' ? undefined : statusValue;
-
+    
     return {
       category_name_vn:
         overrides.category_name_vn !== undefined ? overrides.category_name_vn : category_name_vn,
@@ -80,7 +76,7 @@ const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange
       limit: 10,
     };
   };
-
+  
   // Cleanup timer
   useEffect(() => {
     return () => {
@@ -89,30 +85,30 @@ const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange
       }
     };
   }, []);
-
+  
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCategoryName(value);
     debouncedSendFilters(buildFilters({ category_name_vn: value }));
   };
-
+  
   // Handle status change
   const handleStatusChange = (value: string) => {
     setStatus(value);
     sendFiltersImmediate(buildFilters({ status: value }));
   };
-
+  
   // Handle sort change
   const handleSortChange = (value: string) => {
     setSortBy(value);
     sendFiltersImmediate(buildFilters({ sortBy: value }));
   };
-
+  
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-gray-900">Quản lý danh mục</h1>
-
+      
       <div className="flex gap-4 items-end">
         {/* Search Input */}
         <div className="flex-[2] space-y-2">
@@ -129,7 +125,7 @@ const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange
             />
           </div>
         </div>
-
+        
         {/* Status Filter */}
         <div className="flex-1 space-y-2">
           <Label>Trạng thái</Label>
@@ -138,7 +134,8 @@ const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange
               <SelectValue placeholder="Chọn trạng thái..." />
             </SelectTrigger>
             <SelectContent>
-              {statusOptionsWithAll.map(option => (
+              {/* Thay statusOptionsWithAll bằng STATUS_OPTIONS */}
+              {STATUS_OPTIONS.map(option => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
@@ -146,7 +143,7 @@ const ShowCategoryHeader: React.FC<ShowCategoryHeaderProps> = ({ onFiltersChange
             </SelectContent>
           </Select>
         </div>
-
+        
         {/* Sort By */}
         <div className="flex-1 space-y-2">
           <Label>Sắp xếp theo</Label>

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { authChannel, syncCredentials } from '../../slices/authSlice';
-import type { UserInfo } from '../../types/auth.types';
+import { authChannel, syncCredentials } from '@/slices/authSlice.ts';
+import type { UserInfo } from '@/types/auth.types.ts';
 
 interface AuthBroadcastMessage {
   type: 'AUTH_UPDATE' | 'AUTH_LOGOUT';
@@ -16,11 +16,11 @@ export const useBroadcastAuth = () => {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent<AuthBroadcastMessage>) => {
-      // Chỉ xử lý message từ tab khác, không xử lý message từ chính tab hiện tại
+      // only handle messages from other tabs, not from the current tab
       if (event.data.type === 'AUTH_UPDATE' && event.data.payload) {
         dispatch(syncCredentials(event.data.payload));
       } else if (event.data.type === 'AUTH_LOGOUT') {
-        // Chỉ sync state, không gọi clearCredentials để tránh vòng lặp
+        //only sync state, do not call clearCredentials to avoid loops
         dispatch(syncCredentials({ userInfo: null, accessToken: null }));
       }
     };

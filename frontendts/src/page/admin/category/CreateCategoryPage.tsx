@@ -6,8 +6,8 @@ import Input from '../../../components/ui/custome/Input';
 import Select from '../../../components/ui/custome/Select';
 import Loading from '../../../components/ui/Loading';
 import TiptapEditor from '../../../components/ui/TiptapEditor';
-import { STATUS_OPTIONS } from '../../../constants/categoryConstants';
-import { useCategoryForm } from '../../../hooks/category/useCategoryForm';
+import { STATUS_OPTIONS } from '@/constants/categoryConstants.ts';
+import { useCategoryForm } from '@/hooks/category/useCategoryForm.tsx';
 
 const CreateCategoryPage: React.FC = () => {
   const {

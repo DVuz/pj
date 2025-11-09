@@ -5,7 +5,7 @@ export const categoryApi = createApi({
   reducerPath: 'categoryApi',
   baseQuery: baseQueryWithReauth,
   endpoints: builder => ({
-    // Tạo mới category (POST, có thể kèm file)
+    // create category (POST, maybe with form data)
     createCategory: builder.mutation({
       query: formData => ({
         url: '/category/create',
@@ -13,7 +13,7 @@ export const categoryApi = createApi({
         body: formData, // formData là instance của FormData
       }),
     }),
-    // Lấy danh sách category (GET, truyền query params)
+    // get all categories with params
     getCategories: builder.query({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';

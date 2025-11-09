@@ -1,13 +1,13 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import type { ImageUploadRef } from '../../components/admin/ImageUpload';
-import type { CategoryFormData, FormErrors } from '../../types/category.type';
-import { INITIAL_FORM_DATA } from '../../constants/categoryConstants';
+import type { CategoryFormData, FormErrors } from '@/types/category.type.ts';
+import { INITIAL_FORM_DATA } from '@/constants/categoryConstants.ts';
 import {
   validateCategoryForm,
   hasValidationErrors,
-} from '../../utils/validators/categoryValidator';
-import { showToast } from '../../utils/toastMessages';
-import { useCreateCategoryMutation } from '../../services/api/categoryApi';
+} from '@/utils/validators/categoryValidator.ts';
+import { showToast } from '@/utils/toastMessages.ts';
+import { useCreateCategoryMutation } from '@/services/api/categoryApi.ts';
 
 export const useCategoryForm = () => {
   const [formData, setFormData] = useState<CategoryFormData>(INITIAL_FORM_DATA);
