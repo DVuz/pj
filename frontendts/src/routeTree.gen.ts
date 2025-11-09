@@ -24,7 +24,6 @@ import { Route as AdminProductTypesCreateRouteImport } from './routes/admin/prod
 import { Route as AdminCategoriesTestRouteImport } from './routes/admin/categories/test'
 import { Route as AdminCategoriesListRouteImport } from './routes/admin/categories/list'
 import { Route as AdminCategoriesCreateRouteImport } from './routes/admin/categories/create'
-import { Route as AdminCategoriesDetailIdTestRouteImport } from './routes/admin/categories/detail/$id/test'
 import { Route as AdminCategoriesDetailIdSlugRouteImport } from './routes/admin/categories/detail/$id/$slug'
 
 const R403Route = R403RouteImport.update({
@@ -101,12 +100,6 @@ const AdminCategoriesCreateRoute = AdminCategoriesCreateRouteImport.update({
   path: '/categories/create',
   getParentRoute: () => AdminRouteRoute,
 } as any)
-const AdminCategoriesDetailIdTestRoute =
-  AdminCategoriesDetailIdTestRouteImport.update({
-    id: '/categories/detail/$id/test',
-    path: '/categories/detail/$id/test',
-    getParentRoute: () => AdminRouteRoute,
-  } as any)
 const AdminCategoriesDetailIdSlugRoute =
   AdminCategoriesDetailIdSlugRouteImport.update({
     id: '/categories/detail/$id/$slug',
@@ -129,7 +122,6 @@ export interface FileRoutesByFullPath {
   '/admin/subcategories/create': typeof AdminSubcategoriesCreateRoute
   '/admin/subcategories/list': typeof AdminSubcategoriesListRoute
   '/admin/categories/detail/$id/$slug': typeof AdminCategoriesDetailIdSlugRoute
-  '/admin/categories/detail/$id/test': typeof AdminCategoriesDetailIdTestRoute
 }
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
@@ -146,7 +138,6 @@ export interface FileRoutesByTo {
   '/admin/subcategories/create': typeof AdminSubcategoriesCreateRoute
   '/admin/subcategories/list': typeof AdminSubcategoriesListRoute
   '/admin/categories/detail/$id/$slug': typeof AdminCategoriesDetailIdSlugRoute
-  '/admin/categories/detail/$id/test': typeof AdminCategoriesDetailIdTestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -166,7 +157,6 @@ export interface FileRoutesById {
   '/admin/subcategories/create': typeof AdminSubcategoriesCreateRoute
   '/admin/subcategories/list': typeof AdminSubcategoriesListRoute
   '/admin/categories/detail/$id/$slug': typeof AdminCategoriesDetailIdSlugRoute
-  '/admin/categories/detail/$id/test': typeof AdminCategoriesDetailIdTestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -185,7 +175,6 @@ export interface FileRouteTypes {
     | '/admin/subcategories/create'
     | '/admin/subcategories/list'
     | '/admin/categories/detail/$id/$slug'
-    | '/admin/categories/detail/$id/test'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
@@ -202,7 +191,6 @@ export interface FileRouteTypes {
     | '/admin/subcategories/create'
     | '/admin/subcategories/list'
     | '/admin/categories/detail/$id/$slug'
-    | '/admin/categories/detail/$id/test'
   id:
     | '__root__'
     | '/__auth'
@@ -221,7 +209,6 @@ export interface FileRouteTypes {
     | '/admin/subcategories/create'
     | '/admin/subcategories/list'
     | '/admin/categories/detail/$id/$slug'
-    | '/admin/categories/detail/$id/test'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -338,13 +325,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesCreateRouteImport
       parentRoute: typeof AdminRouteRoute
     }
-    '/admin/categories/detail/$id/test': {
-      id: '/admin/categories/detail/$id/test'
-      path: '/categories/detail/$id/test'
-      fullPath: '/admin/categories/detail/$id/test'
-      preLoaderRoute: typeof AdminCategoriesDetailIdTestRouteImport
-      parentRoute: typeof AdminRouteRoute
-    }
     '/admin/categories/detail/$id/$slug': {
       id: '/admin/categories/detail/$id/$slug'
       path: '/categories/detail/$id/$slug'
@@ -391,7 +371,6 @@ interface AdminRouteRouteChildren {
   AdminSubcategoriesCreateRoute: typeof AdminSubcategoriesCreateRoute
   AdminSubcategoriesListRoute: typeof AdminSubcategoriesListRoute
   AdminCategoriesDetailIdSlugRoute: typeof AdminCategoriesDetailIdSlugRoute
-  AdminCategoriesDetailIdTestRoute: typeof AdminCategoriesDetailIdTestRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
@@ -404,7 +383,6 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminSubcategoriesCreateRoute: AdminSubcategoriesCreateRoute,
   AdminSubcategoriesListRoute: AdminSubcategoriesListRoute,
   AdminCategoriesDetailIdSlugRoute: AdminCategoriesDetailIdSlugRoute,
-  AdminCategoriesDetailIdTestRoute: AdminCategoriesDetailIdTestRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(

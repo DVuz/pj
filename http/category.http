@@ -1,0 +1,4 @@
+### GET detail category by id with subcategories, producttypes, products
+GET {{baseUrl}}/category/1
+
+###
