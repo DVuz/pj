@@ -47,6 +47,7 @@ frontend/build/
 frontend/.parcel-cache/
 frontend/dist/
 frontend/coverage/
+frontendts/src/routeTree.gen.ts
 
 # === Express build or temp ===
 backend/dist/
