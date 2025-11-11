@@ -131,5 +131,4 @@ export function CustomPagination({
       </div>
     </div>
   );
-  // ...existing code...
 }

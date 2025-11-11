@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
-import { CustomPagination } from '@/components/ui/custome/CustomPagination';
+import {useEffect} from 'react';
+import {CustomPagination} from '@/components/ui/custome/CustomPagination';
 import FilterHeader from '@/components/admin/category/FilterHeader';
-import { useGetCategory } from '@/hooks/category/useGetCategory';
-import { CategoryTable } from '@/components/admin/category/CategoryTable';
+import {useGetCategory} from '@/hooks/category/useGetCategory';
+import {CategoryTable} from '@/components/admin/category/CategoryTable';
 // import { useToast } from '@/components/ui/use-toast';
+import slugify from '@/utils/slugify';
 
 export default function CategoryTest() {
   // const { toast } = useToast();
@@ -31,8 +32,9 @@ export default function CategoryTest() {
   }, [data]);
 
   // Các hàm xử lý thao tác
-  const handleViewDetails = () => {
-    // Thêm logic xem chi tiết tại đây
+  const handleViewDetails = (category_id:number, category_name_vn: string) => {
+    const finalSlug = slugify(category_name_vn);
+    window.location.href = `/admin/categories/detail/${category_id}/${finalSlug}`;
   };
 
   const handleEdit = () => {

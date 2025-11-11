@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useGetCategoriesQuery } from '@/services/api/categoryApi';
-import type { Categories } from '@/types/category.type';
+import type { Category } from '@/types/category.type';
 import type { SubcategoryQuery } from '@/types/subcategory.type';
 import { RefreshCw, Search } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -74,7 +74,7 @@ const FilterSubcategory = ({
               <SelectValue placeholder="Lọc theo danh mục cha" />
             </SelectTrigger>
             <SelectContent className="max-h-60">
-              {categories.map((category: Categories) => (
+              {categories.map((category: Category) => (
                 <SelectItem key={category.category_id} value={category.category_id.toString()}>
                   {category.category_name_vn}
                 </SelectItem>

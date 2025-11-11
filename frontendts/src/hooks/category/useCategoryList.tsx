@@ -60,19 +60,19 @@ export const useCategoryList = () => {
   console.log('Error:', error);
 
   // Handle filters change
-  const handleFiltersChange = useCallback((newFilters: CategoryFilters) => {
-    // Loại bỏ các trường rỗng và 'all' values
-    const cleanFilters = Object.fromEntries(
-      Object.entries(newFilters).filter(
-        ([, value]) => value !== '' && value !== null && value !== undefined && value !== 'all'
-      )
-    ) as CategoryFilters;
+  // const handleFiltersChange = useCallback((newFilters: CategoryFilters) => {
+  //   // Loại bỏ các trường rỗng và 'all' values
+  //   const cleanFilters = Object.fromEntries(
+  //     Object.entries(newFilters).filter(
+  //       ([, value]) => value !== '' && value !== null && value !== undefined && value !== 'all'
+  //     )
+  //   ) as CategoryFilters;
 
-    console.log('New filters before clean:', newFilters);
-    console.log('Clean filters applied:', cleanFilters);
+  //   console.log('New filters before clean:', newFilters);
+  //   console.log('Clean filters applied:', cleanFilters);
 
-    setFilters(cleanFilters);
-  }, []);
+  //   setFilters(cleanFilters);
+  // }, []);
 
   // Handle page change
   const handlePageChange = useCallback((newPage: number) => {
@@ -113,7 +113,7 @@ export const useCategoryList = () => {
     filters,
 
     // Actions
-    handleFiltersChange,
+    // handleFiltersChange,
     handlePageChange,
     handleItemsPerPageChange,
     refetch,

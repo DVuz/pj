@@ -7,7 +7,7 @@ import Select from '@/components/ui/custome/Select';
 import Loading from '@/components/ui/Loading';
 import TipTapEditor from '@/components/ui/TipTapEditor.tsx';
 import { SET_ACTIVE_OPTIONS } from '@/constants/common';
-import type { Categories } from '@/types/category.type';
+import type { Category } from '@/types/category.type';
 import { useGetCategoriesQuery } from '../../../services/api/categoryApi';
 import { useCreateSubcategory } from '@/hooks/subcategory/useCreateSubcategory';
 
@@ -28,7 +28,7 @@ const CreateSubcategories = () => {
 
   // Tạo options cho Select category
   const categoryOptions =
-    categoriesData?.map((category: Categories) => ({
+    categoriesData?.map((category: Category) => ({
       value: category.category_id.toString(),
       label: category.category_name_vn,
     })) || [];

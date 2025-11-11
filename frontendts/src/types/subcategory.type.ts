@@ -1,4 +1,5 @@
 import type { Pagination } from './common.types.ts';
+
 export interface SubcategoryFormData {
   categoryId: number;
   subcategoryNameVn: string;

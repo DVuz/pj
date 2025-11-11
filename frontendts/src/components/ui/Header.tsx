@@ -1,22 +1,32 @@
+import { useGetCategoriesQuery } from '@/services/api/categoryApi.ts';
+import type { Category } from '@/types/category.type';
+import { generateSubcategoryUrl } from '@/utils/productUrl';
 import { Link } from '@tanstack/react-router';
-import { ShoppingCart, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, Search, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
 import UserInfo from './UserInfo';
+import Input from './custome/Input';
 
 interface HeaderItem {
   id: string;
   display: string;
   path: string;
   isLogo?: boolean;
+  isProducts?: boolean;
 }
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [isProductDropdownOpen, setIsProductDropdownOpen] = useState<boolean>(false);
+  const cartItemCount = 10;
+
+  const { data: categoriesData } = useGetCategoriesQuery({});
 
   const headerList: HeaderItem[] = [
     { id: 'ddstore', display: 'DDStore', path: '/', isLogo: true },
     { id: 'about', display: 'Về chúng tôi', path: '/about' },
-    { id: 'catalog', display: 'Sản phẩm', path: '/catalog' },
+    { id: 'catalog', display: 'Sản phẩm', path: '/catalog', isProducts: true },
     { id: 'privacy', display: 'Chính sách bảo mật', path: '/privacy' },
     { id: 'contact', display: 'Liên hệ', path: '/contact' },
   ];
@@ -25,73 +35,186 @@ const Header: React.FC = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const categories: Category[] = categoriesData?.data.categories || [];
+
   return (
-    <div className="sticky top-0 z-50 bg-[#16512e] text-white shadow-md">
-      <div className="max-w-[1560px] mx-auto px-5 py-2.5 flex justify-between items-center relative">
-        {/* Logo for desktop */}
-        <Link
-          to="/"
-          className="text-2xl font-extrabold text-[#f59e0b] hover:opacity-80 transition-opacity"
-        >
-          DDStore
-        </Link>
+    <header className="bg-(--green-primary) text-white shadow-lg sticky top-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16 gap-4">
+          {/* Left Section: Mobile Menu Button + Logo + Desktop Navigation */}
+          <div className="flex items-center gap-6">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleMenu}
+              className="lg:hidden p-2 hover:bg-green-700 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
-          {headerList
-            .filter(item => !item.isLogo)
-            .map(item => (
-              <Link
-                key={item.id}
-                to={item.path}
-                className="text-sm font-medium text-white hover:text-[#f59e0b] transition-colors"
-              >
-                {item.display}
-              </Link>
-            ))}
-        </nav>
+            {/* Logo */}
+            <Link to="/" className="flex items-center shrink-0">
+              <span className="text-2xl md:text-3xl font-bold text-yellow-400">DDStore</span>
+            </Link>
 
-        {/* Actions */}
-        <div className="flex items-center gap-4">
-          <UserInfo />
-          <ShoppingCart
-            className="text-white cursor-pointer hover:text-[#f59e0b] transition-colors"
-            size={24}
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-6">
+              {headerList
+                .filter(item => !item.isLogo)
+                .map(item => (
+                  <div
+                    key={item.id}
+                    className="relative"
+                    onMouseEnter={() => item.isProducts && setIsProductDropdownOpen(true)}
+                    onMouseLeave={() => item.isProducts && setIsProductDropdownOpen(false)}
+                  >
+                    <Link
+                      to={item.path}
+                      className="text-sm font-medium hover:text-yellow-400 transition-colors flex items-center gap-1 py-2 whitespace-nowrap"
+                    >
+                      {item.display}
+                      {item.isProducts && <ChevronDown size={16} />}
+                    </Link>
+
+                    {/* Desktop Product Dropdown */}
+                    {item.isProducts && isProductDropdownOpen && (
+                      <div className="absolute top-full left-0 pt-2">
+                        <div className="bg-white text-gray-800 rounded-lg shadow-xl min-w-[600px] p-6">
+                          <div className="grid grid-cols-2 gap-8">
+                            {categories.map(category => (
+                              <div key={category.category_id}>
+                                <h3 className="font-bold text-lg mb-3 text-green-800 border-b pb-2">
+                                  {category.category_name_vn}
+                                </h3>
+                                <ul className="space-y-2">
+                                  {category.subcategories?.map(subcategory => (
+                                    <li key={subcategory.subcategory_id}>
+                                      <Link
+                                        to={generateSubcategoryUrl(
+                                          category.category_name_vn,
+                                          category.category_id,
+                                          subcategory.subcategory_name_vn,
+                                          subcategory.subcategory_id
+                                        )}
+                                        className="text-sm hover:text-green-700 hover:translate-x-1 transition-all inline-block"
+                                        onClick={() => setIsProductDropdownOpen(false)}
+                                      >
+                                        {subcategory.subcategory_name_vn}
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </nav>
+          </div>
+
+          {/* Right Section: Search + Avatar + Cart */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Search Input - Hidden on mobile */}
+            <div className="hidden md:block w-96 pt-4">
+              <Input
+                type="text"
+                value={searchValue}
+                onChange={e => setSearchValue(e.target.value)}
+                placeholder="Tìm kiếm sản phẩm..."
+                icon={Search}
+                className="mb-0"
+              />
+            </div>
+
+            {/* UserInfo */}
+            <div className="shrink-0">
+              <UserInfo />
+            </div>
+
+            {/* Shopping Cart */}
+            <Link
+              to="/cart"
+              className="relative p-2 hover:bg-green-700 rounded-lg transition-colors shrink-0"
+            >
+              <ShoppingCart size={24} className="md:w-6 md:h-6" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartItemCount > 99 ? '99+' : cartItemCount}
+                </span>
+              )}
+            </Link>
+          </div>
+        </div>
+
+        {/* Mobile Search - Show below header */}
+        <div className="md:hidden pb-3">
+          <Input
+            type="text"
+            value={searchValue}
+            onChange={e => setSearchValue(e.target.value)}
+            placeholder="Tìm kiếm sản phẩm..."
+            icon={Search}
+            className="mb-0"
           />
-
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden bg-transparent border-0 text-white cursor-pointer p-1.5"
-            onClick={toggleMenu}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-[#16512e] border-t border-white/10 p-4">
-            <nav className="flex flex-col gap-4">
+          <nav className="lg:hidden py-4 border-t border-green-700">
+            <div className="flex flex-col space-y-3">
               {headerList.map(item => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  className={`font-medium no-underline text-white px-2 py-2 rounded transition-all hover:bg-white/10 hover:text-[#f59e0b] ${
-                    item.isLogo
-                      ? 'text-xl font-extrabold text-[#f59e0b] text-center mb-2'
-                      : 'text-base'
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.display}
-                </Link>
+                <div key={item.id}>
+                  <Link
+                    to={item.path}
+                    onClick={() => !item.isProducts && setIsMenuOpen(false)}
+                    className={`text-sm font-medium hover:text-yellow-400 transition-colors py-2 ${
+                      item.isLogo ? 'text-xl font-bold text-yellow-400 text-center mb-2' : ''
+                    } flex items-center justify-between`}
+                  >
+                    {item.display}
+                    {item.isProducts && <ChevronDown size={16} />}
+                  </Link>
+
+                  {/* Mobile Product List */}
+                  {item.isProducts && (
+                    <div className="ml-4 mt-2 space-y-3">
+                      {categories.map(category => (
+                        <div key={category.category_id}>
+                          <h4 className="font-semibold text-yellow-300 mb-2">
+                            {category.category_name_vn}
+                          </h4>
+                          <ul className="ml-4 space-y-1">
+                            {category.subcategories?.map(subcategory => (
+                              <li key={subcategory.subcategory_id}>
+                                <Link
+                                  to={generateSubcategoryUrl(
+                                    category.category_name_vn,
+                                    category.category_id,
+                                    subcategory.subcategory_name_vn,
+                                    subcategory.subcategory_id
+                                  )}
+                                  className="text-sm text-gray-200 hover:text-yellow-400"
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  {subcategory.subcategory_name_vn}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
-            </nav>
-          </div>
+            </div>
+          </nav>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 

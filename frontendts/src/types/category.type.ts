@@ -1,3 +1,4 @@
+import type {Subcategory} from './subcategory.type';
 export interface CategoryFormData {
   categoryNameVn: string;
   descriptionVn: string;
@@ -28,11 +29,12 @@ export interface CategoryQuery {
   sort_by?: 'category_name_vn' | 'created_at'; // default = 'created_at'
   sort_order?: 'ASC' | 'DESC'; // default = 'ASC'
 }
-export interface Categories {
+export interface Category {
   category_id: number;
   category_name_vn: string;
   description_vn: string;
   status: string;
+  subcategories?: Subcategory[];
   image_url?: string;
   created_at: string;
   updated_at: string;

@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Eye } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import type { Categories } from '@/types/category.type';
+import type { Category } from '@/types/category.type';
 
 // Kiểu dữ liệu danh mục
 // interface Category {
@@ -24,11 +24,11 @@ import type { Categories } from '@/types/category.type';
 // }
 
 interface CategoryTableProps {
-  data: Categories[];
+  data: Category[];
   isLoading: boolean;
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
-  onViewDetails?: (id: number) => void;
+  onViewDetails?: (category_id: number, category_name_v:string) => void;
 }
 
 export function CategoryTable({
@@ -135,7 +135,7 @@ export function CategoryTable({
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-700"
-                            onClick={() => onViewDetails(category.category_id)}
+                            onClick={() => onViewDetails(category.category_id, category.category_name_vn)}
                           >
                             <Eye className="h-4 w-4" />
                           </Button>

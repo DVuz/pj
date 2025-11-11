@@ -24,12 +24,14 @@ export const subcategoryApi = createApi({
           method: 'GET',
         };
       },
-      transformResponse: response => {
-        console.log('Raw subcategory API response:', response);
-        return response;
-      },
+    }),
+    getSubcategoryById: builder.query({
+      query: id => ({
+        url: `/subcategories/${id}`,
+        method: 'GET',
+      }),
     }),
   }),
 });
 
-export const { useCreateSubcategoryMutation, useGetSubcategoriesQuery } = subcategoryApi;
+export const { useCreateSubcategoryMutation, useGetSubcategoriesQuery, useGetSubcategoryByIdQuery } = subcategoryApi;
