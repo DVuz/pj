@@ -86,7 +86,7 @@
         GROUP BY pt.product_type_id
         ORDER BY ${orderByClause}
         LIMIT ? OFFSET ?
-          );
+          )
         SELECT
           pts.product_type_id,
           pts.product_type_name_vn,
@@ -98,18 +98,18 @@
           pts.updated_at,
           pts.product_count,
           pts.active_product_count,
-  
+
           -- Subcategory info
           s.subcategory_name_vn,
           s.image_url as subcategory_image_url,
           s.status as subcategory_status,
           s.category_id,
-  
+
           -- Category info
           c.category_name_vn,
           c.image_url as category_image_url,
           c.status as category_status,
-  
+
           -- Products info
           p.product_id,
           p.product_code,

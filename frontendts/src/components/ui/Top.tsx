@@ -1,6 +1,13 @@
 import React from 'react';
+import { useLocation } from '@tanstack/react-router';
 
 const Top: React.FC = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  const isDetailPage = currentPath.startsWith('/product/');
+  if(isDetailPage) {
+    return null;
+  }
   const companyName = (
     import.meta.env.VITE_COMPANY_NAME || 'Cửa hàng gỗ Dương Dũng - DDStore'
   ).trim();

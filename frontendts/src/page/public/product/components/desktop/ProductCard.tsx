@@ -1,3 +1,4 @@
+import { createSlug } from '@/utils/productUrl';
 import { Check, Heart, ShoppingCart } from 'lucide-react';
 import React from 'react';
 
@@ -23,6 +24,11 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, inCart, cartCount }) => {
+  const handleOpenProductDetailPage = (product: Product) => {
+    const productSlug = createSlug(product.product_name_vn);
+    const url = `/product/${productSlug}-${product.product_id}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
   return (
     <div className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden w-full max-w-[280px]">
       {/* Image Container */}
@@ -30,7 +36,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, inCart, cartCount })
         <img
           src={product.main_image}
           alt={product.product_name_vn}
-          className="w-full h-[150px] sm:h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-[150px] sm:h-[200px] object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
+          onClick={() => handleOpenProductDetailPage(product)}
         />
 
         {/* Top Actions */}
@@ -44,7 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, inCart, cartCount })
         </div>
 
         {/* Tag - hiển thị material */}
-        <span className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-green-100 text-green-700 text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md">
+        <span className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-green-100 text-green-700 text-xs font-medium px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md ">
           {product.product_type_name_vn}
         </span>
       </div>
@@ -52,7 +59,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, inCart, cartCount })
       {/* Content */}
       <div className="p-3 sm:p-4">
         {/* Product Name */}
-        <h3 className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight mb-1 sm:mb-2 line-clamp-2">
+        <h3
+          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight mb-1 sm:mb-2 line-clamp-2 cursor-pointer"
+          onClick={() => handleOpenProductDetailPage(product)}
+        >
           {product.product_name_vn}
         </h3>
 

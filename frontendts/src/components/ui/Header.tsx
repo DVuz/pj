@@ -2,10 +2,10 @@ import { useGetCategoriesQuery } from '@/services/api/categoryApi.ts';
 import type { Category } from '@/types/category.type';
 import { generateSubcategoryUrl } from '@/utils/productUrl';
 import { Link } from '@tanstack/react-router';
-import { ChevronDown, Menu, Search, ShoppingCart, X } from 'lucide-react';
+import { ChevronDown, Menu, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
+import SearchResultsDropdown from './SearchResultsDropdown';
 import UserInfo from './UserInfo';
-import Input from './custome/Input';
 
 interface HeaderItem {
   id: string;
@@ -17,7 +17,6 @@ interface HeaderItem {
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>('');
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState<boolean>(false);
   const cartItemCount = 10;
 
@@ -118,15 +117,8 @@ const Header: React.FC = () => {
           {/* Right Section: Search + Avatar + Cart */}
           <div className="flex items-center gap-3 shrink-0">
             {/* Search Input - Hidden on mobile */}
-            <div className="hidden md:block w-96 pt-4">
-              <Input
-                type="text"
-                value={searchValue}
-                onChange={e => setSearchValue(e.target.value)}
-                placeholder="Tìm kiếm sản phẩm..."
-                icon={Search}
-                className="mb-0"
-              />
+            <div className="hidden md:block w-96 relative">
+              <SearchResultsDropdown />
             </div>
 
             {/* UserInfo */}
@@ -150,15 +142,8 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile Search - Show below header */}
-        <div className="md:hidden pb-3">
-          <Input
-            type="text"
-            value={searchValue}
-            onChange={e => setSearchValue(e.target.value)}
-            placeholder="Tìm kiếm sản phẩm..."
-            icon={Search}
-            className="mb-0"
-          />
+        <div className="md:hidden pb-3 relative">
+          <SearchResultsDropdown />
         </div>
 
         {/* Mobile Menu */}

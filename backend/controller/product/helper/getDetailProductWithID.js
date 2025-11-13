@@ -1,7 +1,8 @@
-const { successResponse, errorResponse } = require('../../utils/response');
-const db = require('../../config/db.config');
-const { getCache, setCache, generateCacheKey } = require('../../utils/cache/redis');
-const { transformProductData } = require('../helpers/dataTransform');
+const { successResponse, errorResponse } = require('../../../utils/response');
+const db = require('../../../config/db.config');
+const { getCache, setCache, generateCacheKey } = require('../../../utils/cache/redis');
+const { transformProductData } = require('../../helpers/dataTransform');
+//didnt use in this project
 
 const getDetailProductWithID = async (req, res) => {
   try {
