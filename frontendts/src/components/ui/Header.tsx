@@ -26,7 +26,7 @@ const Header: React.FC = () => {
     { id: 'ddstore', display: 'DDStore', path: '/', isLogo: true },
     { id: 'about', display: 'Về chúng tôi', path: '/about' },
     { id: 'catalog', display: 'Sản phẩm', path: '/catalog', isProducts: true },
-    { id: 'privacy', display: 'Chính sách bảo mật', path: '/privacy' },
+    // { id: 'privacy', display: 'Chính sách bảo mật', path: '/privacy' },
     { id: 'contact', display: 'Liên hệ', path: '/contact' },
   ];
 

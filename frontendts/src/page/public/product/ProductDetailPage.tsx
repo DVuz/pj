@@ -1,7 +1,7 @@
 import React from 'react';
 import Loading from '../../../components/ui/Loading';
-import { useProductDetailParams } from '../../../hooks/product/useProductDetailParams';
-import { useGetProductByIdQuery } from '../../../services/api/productApi';
+import { useProductDetailParams } from '@/hooks/product/useProductDetailParams.tsx';
+import { useGetProductByIdQuery } from '@/services/api/productApi.ts';
 import ImageCarousel from './components/desktop/ImageCarousel';
 import ProductInfo from './components/desktop/ProductInfo';
 import RelatedProducts from './components/desktop/RelatedProducts';

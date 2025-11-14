@@ -57,7 +57,7 @@ export const MENU_ITEMS = [
       },
       {
         label: 'Danh sách sản phẩm',
-        fullPath: '/admin/products',
+        fullPath: '/admin/products/list',
         icon: <List size={16} />,
       },
       {

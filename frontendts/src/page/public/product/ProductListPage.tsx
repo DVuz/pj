@@ -1,8 +1,8 @@
-import { CustomPagination } from '../../../components/ui/custome/CustomPagination';
+import { CustomPagination } from '@/components/ui/custome/CustomPagination.tsx';
 import Loading from '../../../components/ui/Loading';
-import { useGetProductList } from '../../../hooks/category/useGetProductList';
-import { useProductParams } from '../../../hooks/product/useProductParams';
-import { useGetSubcategoryByIdQuery } from '../../../services/api/subcategoryApi';
+import { useGetProductList } from '@/hooks/category/useGetProductList.tsx';
+import { useProductParams } from '@/hooks/product/useProductParams.tsx';
+import { useGetSubcategoryByIdQuery } from '@/services/api/subcategoryApi.ts';
 import PriceFilter from './components/desktop/PriceFilter';
 import ProductList from './components/desktop/ProductList';
 import ProductTypeFilter from './components/desktop/ProductTypeFilter';
