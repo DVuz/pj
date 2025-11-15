@@ -19,8 +19,11 @@ interface ProductFormData {
   colorVn: string;
   status: string;
   mainImage: string;
+  subImages: string[]; // URLs của sub images hiện tại
   mainImageFile?: File | null;
   subImagesFiles?: File[];
+  deletedSubImages?: string[]; // Track sub images bị xóa
+  replaceMainImage?: boolean; // Flag để biết có thay main image không
 }
 
 interface FormErrors {
@@ -56,6 +59,9 @@ const INITIAL_FORM_DATA: ProductFormData = {
   colorVn: '',
   status: 'active',
   mainImage: '',
+  subImages: [],
+  deletedSubImages: [],
+  replaceMainImage: false,
 };
 
 export const useProductEdit = (productId: number) => {
@@ -95,6 +101,7 @@ export const useProductEdit = (productId: number) => {
         colorVn: product.color_vn || '',
         status: product.status || 'active',
         mainImage: product.main_image || '',
+        subImages: Array.isArray(product.sub_image) ? product.sub_image : [],
       };
       setFormData(loadedData);
       setOriginalData(loadedData); // Lưu data gốc để reset
@@ -140,7 +147,7 @@ export const useProductEdit = (productId: number) => {
           : null
         : (value as File | null);
 
-      setFormData(prev => ({ ...prev, mainImageFile: file }));
+      setFormData(prev => ({ ...prev, mainImageFile: file, replaceMainImage: true }));
 
       if (errors.mainImage) {
         setErrors(prev => ({ ...prev, mainImage: undefined }));
@@ -149,10 +156,18 @@ export const useProductEdit = (productId: number) => {
     [errors.mainImage]
   );
 
+  const handleRemoveMainImage = useCallback(() => {
+    setFormData(prev => ({ ...prev, mainImage: '', mainImageFile: null, replaceMainImage: true }));
+    mainImageUploadRef.current?.clearAll();
+  }, []);
+
   const handleSubImagesChange = useCallback(
     (e: { target: { name: string; value: File | File[] | null; files: File[] } }) => {
       const { files } = e.target;
-      setFormData(prev => ({ ...prev, subImagesFiles: files }));
+      setFormData(prev => ({
+        ...prev,
+        subImagesFiles: prev.subImagesFiles ? [...prev.subImagesFiles, ...files] : files,
+      }));
 
       if (errors.subImages) {
         setErrors(prev => ({ ...prev, subImages: undefined }));
@@ -160,6 +175,21 @@ export const useProductEdit = (productId: number) => {
     },
     [errors.subImages]
   );
+
+  const handleRemoveNewSubImage = useCallback((index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      subImagesFiles: prev.subImagesFiles?.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  const handleRemoveSubImage = useCallback((imageUrl: string) => {
+    setFormData(prev => ({
+      ...prev,
+      subImages: prev.subImages.filter(url => url !== imageUrl),
+      deletedSubImages: [...(prev.deletedSubImages || []), imageUrl],
+    }));
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -222,8 +252,18 @@ export const useProductEdit = (productId: number) => {
       if (formData.colorVn) formDataToSend.append('color_vn', formData.colorVn);
 
       // Append main image if changed
-      if (formData.mainImageFile) {
-        formDataToSend.append('main_image', formData.mainImageFile);
+      if (formData.replaceMainImage) {
+        if (formData.mainImageFile) {
+          formDataToSend.append('main_image', formData.mainImageFile);
+        } else {
+          // Nếu xóa main image
+          formDataToSend.append('remove_main_image', 'true');
+        }
+      }
+
+      // Append deleted sub images
+      if (formData.deletedSubImages && formData.deletedSubImages.length > 0) {
+        formDataToSend.append('deleted_sub_images', JSON.stringify(formData.deletedSubImages));
       }
 
       // Append sub images if changed
@@ -267,7 +307,10 @@ export const useProductEdit = (productId: number) => {
     subImagesUploadRef,
     handleInputChange,
     handleMainImageChange,
+    handleRemoveMainImage,
     handleSubImagesChange,
+    handleRemoveSubImage,
+    handleRemoveNewSubImage,
     handleSubmit,
     resetForm,
   };

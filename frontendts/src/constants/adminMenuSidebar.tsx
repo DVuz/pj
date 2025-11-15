@@ -60,11 +60,11 @@ export const MENU_ITEMS = [
         fullPath: '/admin/products/list',
         icon: <List size={16} />,
       },
-      {
-        label: 'Chỉnh sửa sản phẩm',
-        fullPath: '/admin/products/edit',
-        icon: <Edit size={16} />,
-      },
+      // {
+      //   label: 'Chỉnh sửa sản phẩm',
+      //   fullPath: '/admin/products/edit',
+      //   icon: <Edit size={16} />,
+      // },
       {
         label: 'Quản lý tồn kho',
         fullPath: '/admin/products/inventory',

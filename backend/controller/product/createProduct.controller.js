@@ -38,8 +38,8 @@ const createProduct = async (req, res) => {
       );
     }
 
-    if (req.files && req.files['subImages']) {
-      for (const file of req.files['subImages']) {
+    if (req.files && req.files['subImage']) {
+      for (const file of req.files['subImage']) {
         const subImageUrl = await uploadToCloudinary(file.buffer, CLOUDINARY_FOLDERS.PRODUCT);
         createSubImageUrls.push(subImageUrl);
       }

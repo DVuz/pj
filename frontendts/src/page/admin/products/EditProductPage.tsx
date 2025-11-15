@@ -9,13 +9,18 @@ import { useProductEdit } from '@/hooks/product/useProductEdit';
 import { useGetProductTypesQuery } from '@/services/api/productTypeApi.ts';
 import type { ProductType } from '@/types/product-type.type';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 
 const EditProductPage: React.FC = () => {
   const { productId } = useParams({ strict: false });
   const navigate = useNavigate();
+  const [previewModal, setPreviewModal] = React.useState({
+    isOpen: false,
+    imageUrl: '',
+    imageName: '',
+  });
 
   const {
     formData,
@@ -26,7 +31,10 @@ const EditProductPage: React.FC = () => {
     subImagesUploadRef,
     handleInputChange,
     handleMainImageChange,
+    handleRemoveMainImage,
     handleSubImagesChange,
+    handleRemoveSubImage,
+    handleRemoveNewSubImage,
     handleSubmit,
     resetForm,
   } = useProductEdit(productId ? parseInt(productId as string) : 0);
@@ -46,6 +54,14 @@ const EditProductPage: React.FC = () => {
 
   const handleBack = () => {
     navigate({ to: '/admin/products' });
+  };
+
+  const openPreview = (imageUrl: string, imageName: string) => {
+    setPreviewModal({ isOpen: true, imageUrl, imageName });
+  };
+
+  const closePreview = () => {
+    setPreviewModal({ isOpen: false, imageUrl: '', imageName: '' });
   };
 
   if (isFetching) {
@@ -178,17 +194,31 @@ const EditProductPage: React.FC = () => {
                       maxSize={5}
                       error={errors.mainImage}
                       disabled={isLoading}
+                      preview={false}
                     />
-                    {formData.mainImage && !formData.mainImageFile && (
-                      <div className="mt-2">
-                        <p className="text-xs text-gray-600 mb-1">Hình ảnh hiện tại:</p>
-                        <img
-                          src={formData.mainImage}
-                          alt="Current main"
-                          className="w-32 h-32 object-cover rounded border"
-                        />
-                      </div>
-                    )}
+                    {formData.mainImage &&
+                      !formData.mainImageFile &&
+                      !formData.replaceMainImage && (
+                        <div className="mt-2 relative">
+                          <p className="text-xs text-gray-600 mb-1">Hình ảnh hiện tại:</p>
+                          <div className="relative inline-block group">
+                            <img
+                              src={formData.mainImage}
+                              alt="Current main"
+                              className="w-32 h-32 object-cover rounded border cursor-pointer hover:opacity-75 transition-opacity"
+                              onClick={() => openPreview(formData.mainImage, 'Hình ảnh chính')}
+                            />
+                            <button
+                              type="button"
+                              onClick={handleRemoveMainImage}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                              title="Xóa hình ảnh"
+                            >
+                              <X className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                   </div>
 
                   <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
@@ -201,7 +231,110 @@ const EditProductPage: React.FC = () => {
                       maxSize={5}
                       error={errors.subImages}
                       disabled={isLoading}
+                      preview={false}
                     />
+
+                    {/* Display existing sub images */}
+                    {formData.subImages && formData.subImages.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-gray-700 mb-2">
+                          Hình ảnh hiện có ({formData.subImages.length}):
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {formData.subImages.map((imgUrl, index) => (
+                            <div key={`old-${index}`} className="relative group">
+                              <img
+                                src={imgUrl}
+                                alt={`Existing ${index + 1}`}
+                                className="w-full h-20 object-cover rounded border border-gray-300 cursor-pointer hover:opacity-75 transition-opacity"
+                                onClick={() => openPreview(imgUrl, `Hình ảnh phụ ${index + 1}`)}
+                              />
+                              <button
+                                type="button"
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  handleRemoveSubImage(imgUrl);
+                                }}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 shadow-md z-10"
+                                title="Xóa hình ảnh này"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                              <span className="absolute bottom-1 left-1 bg-black bg-opacity-60 text-white text-[10px] px-1 rounded">
+                                Cũ
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Display newly added sub images */}
+                    {formData.subImagesFiles && formData.subImagesFiles.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-xs font-semibold text-green-700 mb-2">
+                          Hình ảnh mới thêm ({formData.subImagesFiles.length}):
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {formData.subImagesFiles.map((file, index) => {
+                            const previewUrl = URL.createObjectURL(file);
+                            return (
+                              <div key={`new-${index}`} className="relative group">
+                                <img
+                                  src={previewUrl}
+                                  alt={`New ${index + 1}`}
+                                  className="w-full h-20 object-cover rounded border-2 border-green-300 cursor-pointer hover:opacity-75 transition-opacity"
+                                  onClick={() => openPreview(previewUrl, file.name)}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleRemoveNewSubImage(index);
+                                  }}
+                                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 shadow-md z-10"
+                                  title="Xóa hình ảnh mới này"
+                                >
+                                  <X className="h-3 w-3" />
+                                </button>
+                                <span className="absolute bottom-1 left-1 bg-green-600 text-white text-[10px] px-1 rounded">
+                                  Mới
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Summary */}
+                    {((formData.subImages && formData.subImages.length > 0) ||
+                      (formData.subImagesFiles && formData.subImagesFiles.length > 0) ||
+                      (formData.deletedSubImages && formData.deletedSubImages.length > 0)) && (
+                      <div className="mt-3 p-2 bg-blue-50 border border-blue-200 rounded text-xs space-y-1">
+                        <p className="font-semibold text-blue-800">Tóm tắt thay đổi:</p>
+                        <div className="grid grid-cols-3 gap-2 text-gray-700">
+                          <div>
+                            <span className="font-medium">Giữ lại:</span>{' '}
+                            <span className="text-green-600 font-semibold">
+                              {formData.subImages?.length || 0}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="font-medium">Xóa:</span>{' '}
+                            <span className="text-red-600 font-semibold">
+                              {formData.deletedSubImages?.length || 0}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="font-medium">Thêm mới:</span>{' '}
+                            <span className="text-blue-600 font-semibold">
+                              {formData.subImagesFiles?.length || 0}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -351,6 +484,39 @@ const EditProductPage: React.FC = () => {
           </div>
         </form>
       </div>
+
+      {/* Preview Modal */}
+      {previewModal.isOpen && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-9999"
+          onClick={closePreview}
+        >
+          <div
+            className="relative max-w-[90vw] max-h-[90vh] bg-white rounded-xl overflow-hidden shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+              <h3 className="text-lg font-semibold text-gray-700">{previewModal.imageName}</h3>
+              <button
+                onClick={closePreview}
+                className="p-1 rounded-md hover:bg-gray-200 text-gray-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Image */}
+            <div className="p-5 flex items-center justify-center">
+              <img
+                src={previewModal.imageUrl}
+                alt={previewModal.imageName}
+                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

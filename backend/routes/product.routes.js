@@ -5,9 +5,18 @@ const upload = require('../config/multer');
 const  createProduct  = require('../controller/product/createProduct.controller');
 const getProduct = require('../controller/product/getProduct.controller');
 const getProducDetailById = require('../controller/product/getDetailProductById.controller');
+const updateProduct = require('../controller/product/updateProduct.controller');
 
 router.get('/:product_id', getProducDetailById);
-
+router.put(
+  '/:product_id',
+  // authMiddleware(),
+  upload.fields([
+    { name: 'main_image', maxCount: 1 },
+    { name: 'sub_images', maxCount: 10 },
+  ]),
+  updateProduct
+);
 router.get('/', getProduct);
 
 router.post(
