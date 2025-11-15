@@ -6,10 +6,12 @@ const authMiddleware = require('../middlewares/auth.middlware');
 const upload = require('../config/multer');
 const getDetailProductTypeWithID = require('../controller/productype/getDetailProductTypeWithID');
 
+
 router.get('/:product_type_id', getDetailProductTypeWithID);
 
+
 router.post('/create',
-	// authMiddleware(),
+	authMiddleware(),
 	upload.fields([{name: 'productTypeImage', maxCount: 1}]),
 	createProductType)
 router.get('/', getProductType);
