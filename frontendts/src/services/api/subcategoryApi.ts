@@ -4,6 +4,7 @@ import { baseQueryWithReauth } from '../query';
 export const subcategoryApi = createApi({
   reducerPath: 'subcategoryApi',
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Subcategories'],
   endpoints: builder => ({
     // Tạo mới subcategory (POST, có thể kèm file)
     createSubcategory: builder.mutation({
@@ -24,6 +25,7 @@ export const subcategoryApi = createApi({
           method: 'GET',
         };
       },
+      providesTags: () => [{ type: 'Subcategories', id: 'LIST' }],
     }),
     getSubcategoryById: builder.query({
       query: id => ({
@@ -31,7 +33,27 @@ export const subcategoryApi = createApi({
         method: 'GET',
       }),
     }),
+    deleteSubcategoryById: builder.mutation({
+      query: id => ({
+        url: `/subcategories/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'Subcategories', id: 'LIST' }],
+    }),
+    updateSubcategoryById: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/subcategories/${id}`,
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
   }),
 });
 
-export const { useCreateSubcategoryMutation, useGetSubcategoriesQuery, useGetSubcategoryByIdQuery } = subcategoryApi;
+export const {
+  useCreateSubcategoryMutation,
+  useGetSubcategoriesQuery,
+  useGetSubcategoryByIdQuery,
+  useDeleteSubcategoryByIdMutation,
+  useUpdateSubcategoryByIdMutation,
+} = subcategoryApi;

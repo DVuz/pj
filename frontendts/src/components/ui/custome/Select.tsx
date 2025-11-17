@@ -1,5 +1,5 @@
+import { Check, ChevronDown, Search, X } from 'lucide-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronDown, Check, Search, X } from 'lucide-react';
 
 type OptionValue = string | number;
 
@@ -51,8 +51,12 @@ const Select: React.FC<SelectProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const searchRef = useRef<HTMLInputElement | null>(null);
 
+  // Đồng bộ selected với value prop
   useEffect(() => {
-    setSelected(multiple ? (Array.isArray(value) ? value : []) : value);
+    const newSelected = multiple ? (Array.isArray(value) ? value : []) : value;
+    console.log('Select useEffect - name:', name, 'value:', value, 'newSelected:', newSelected);
+    setSelected(newSelected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, multiple]);
 
   useEffect(() => {

@@ -33,7 +33,7 @@ export const useGetProductTypes = () => {
   ) as Partial<ProductTypeQuery>;
 
   // === GỌI API ===
-  const { data, isLoading, error } = useGetProductTypesQuery(filteredQuery);
+  const { data, isLoading, error, refetch } = useGetProductTypesQuery(filteredQuery);
 
   // === CẬP NHẬT PHÂN TRANG KHI DỮ LIỆU THAY ĐỔI ===
   useEffect(() => {
@@ -126,6 +126,7 @@ export const useGetProductTypes = () => {
     productTypes: data?.data?.product_types || [],
     isLoading,
     error,
+    refetch,
     handlePageChange,
     handleLimitChange,
     handleSortChange,

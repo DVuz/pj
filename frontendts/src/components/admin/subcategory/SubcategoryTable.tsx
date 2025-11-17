@@ -1,3 +1,6 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Loading from '@/components/ui/Loading';
 import {
   Table,
   TableBody,
@@ -6,12 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Edit, Trash2, Eye, CheckCircle2, XCircle } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import Loading from '@/components/ui/Loading';
-
+import { useNavigate } from '@tanstack/react-router';
+import { CheckCircle2, Edit, Eye, Trash2, XCircle } from 'lucide-react';
+import { useState } from 'react';
+import SubcategoryDeleteModal from './SubcategoryDeleteModal';
 // Define types
 interface ProductType {
   product_type_id: number;
@@ -29,6 +31,7 @@ interface Category {
 }
 
 interface Subcategory {
+  image_url: string;
   subcategory_id: number;
   category_id: number;
   description_vn: string;
@@ -45,22 +48,36 @@ interface SubcategoryTableProps {
   data: Subcategory[];
   isLoading: boolean;
   onViewDetails?: (id: number) => void;
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
+  onDeleteSuccess?: () => void;
 }
 
 export function SubcategoryTable({
   data,
   isLoading,
   onViewDetails,
-  onEdit,
-  onDelete,
+  onDeleteSuccess,
 }: SubcategoryTableProps) {
+  const navigate = useNavigate();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedSubcategory, setSelectedSubcategory] = useState<Subcategory | null>(null);
+
+  const handleEdit = (id: number) => {
+    navigate({
+      to: '/admin/subcategories/edit/$subcategoryId',
+      params: { subcategoryId: id.toString() },
+    });
+  };
+
+  const handleDelete = (subcategory: Subcategory) => {
+    setSelectedSubcategory(subcategory);
+    setOpenDeleteModal(true);
+  };
+
   // Hiển thị trạng thái đang tải
   if (isLoading) {
     return (
       <div className="w-full border rounded-md p-8">
-        <Loading text="Đang tải danh mục con..." type='div' />
+        <Loading text="Đang tải danh mục con..." type="div" />
       </div>
     );
   }
@@ -89,6 +106,7 @@ export function SubcategoryTable({
         <TableHeader>
           <TableRow>
             <TableHead>THÔNG TIN DANH MỤC CON</TableHead>
+            <TableHead>HÌNH ẢNH</TableHead>
             <TableHead>DANH MỤC CHA</TableHead>
             <TableHead>MÔ TẢ</TableHead>
             <TableHead>LOẠI SẢN PHẨM</TableHead>
@@ -103,6 +121,17 @@ export function SubcategoryTable({
               <TableCell>
                 <div className="font-medium">{subcategory.subcategory_name_vn}</div>
                 <div className="text-sm text-gray-500">ID: {subcategory.subcategory_id}</div>
+              </TableCell>
+              <TableCell>
+                {subcategory.image_url ? (
+                  <img
+                    src={subcategory.image_url}
+                    alt={subcategory.subcategory_name_vn}
+                    className="w-12 h-12 object-cover rounded border"
+                  />
+                ) : (
+                  <span className="text-gray-400">Không có ảnh</span>
+                )}
               </TableCell>
               <TableCell>
                 {subcategory.category && (
@@ -149,9 +178,9 @@ export function SubcategoryTable({
                                 className="flex items-center gap-1.5 text-sm text-gray-700"
                               >
                                 {pt.status === 'active' ? (
-                                  <CheckCircle2 className="h-3.5 w-3.5 text-green-500 flex-shrink-0" />
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-green-500 shrink-0" />
                                 ) : (
-                                  <XCircle className="h-3.5 w-3.5 text-red-500 flex-shrink-0" />
+                                  <XCircle className="h-3.5 w-3.5 text-red-500 shrink-0" />
                                 )}
                                 <span className="flex-1">{pt.product_type_name_vn}</span>
                               </li>
@@ -190,32 +219,36 @@ export function SubcategoryTable({
                       <Eye className="h-4 w-4" />
                     </Button>
                   )}
-                  {onEdit && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 hover:bg-amber-100 hover:text-amber-700"
-                      onClick={() => onEdit(subcategory.subcategory_id)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                  )}
-                  {onDelete && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
-                      onClick={() => onDelete(subcategory.subcategory_id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-amber-100 hover:text-amber-700"
+                    onClick={() => handleEdit(subcategory.subcategory_id)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
+                    onClick={() => handleDelete(subcategory)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      {openDeleteModal && (
+        <SubcategoryDeleteModal
+          setOpenDeleteModal={setOpenDeleteModal}
+          subcategory={selectedSubcategory}
+          onSuccess={onDeleteSuccess}
+        />
+      )}
     </div>
   );
 }

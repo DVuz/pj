@@ -4,6 +4,7 @@ import { baseQueryWithReauth } from '../query';
 export const categoryApi = createApi({
   reducerPath: 'categoryApi',
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Categories'],
   endpoints: builder => ({
     // create category (POST, maybe with form data)
     createCategory: builder.mutation({
@@ -22,6 +23,7 @@ export const categoryApi = createApi({
           method: 'GET',
         };
       },
+      providesTags: () =>[{ type: 'Categories', id: 'LIST' }]
     }),
 
     //get detail category by id
@@ -31,7 +33,31 @@ export const categoryApi = createApi({
         method: 'GET',
       }),
     }),
+
+    //update category by id
+    updateCategoryById: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/categories/${id}`,
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
+
+    //delete category by id
+    deleteCategoryById: builder.mutation({
+      query: (id: number | string) => ({
+        url: `/categories/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'Categories', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useCreateCategoryMutation, useGetCategoriesQuery, useGetDetailCategoryByIdQuery } = categoryApi;
+export const {
+  useCreateCategoryMutation,
+  useGetCategoriesQuery,
+  useGetDetailCategoryByIdQuery,
+  useUpdateCategoryByIdMutation,
+  useDeleteCategoryByIdMutation,
+} = categoryApi;

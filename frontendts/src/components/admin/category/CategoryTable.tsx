@@ -1,3 +1,6 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Loading from '@/components/ui/Loading';
 import {
   Table,
   TableBody,
@@ -6,45 +9,47 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Edit, Trash2, Eye } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import type { Category } from '@/types/category.type';
-
-// Kiểu dữ liệu danh mục
-// interface Category {
-//   category_id: number;
-//   category_name_vn: string;
-//   description_vn: string | null;
-//   image_url: string;
-//   status: string;
-//   created_at: string | null;
-//   updated_at: string | null;
-// }
+import { useNavigate } from '@tanstack/react-router';
+import { Edit, Eye, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import CategoryDeleteModal from './CategoryDeleteModal';
 
 interface CategoryTableProps {
   data: Category[];
   isLoading: boolean;
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
-  onViewDetails?: (category_id: number, category_name_v:string) => void;
+  onViewDetails?: (category_id: number, category_name_v: string) => void;
+  handleDeleteSuccess?: () => void;
 }
 
 export function CategoryTable({
   data,
   isLoading,
-  onEdit,
-  onDelete,
   onViewDetails,
+  handleDeleteSuccess,
 }: CategoryTableProps) {
   // Hiển thị trạng thái đang tải
+  const navigate = useNavigate();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
+  const handleEdit = (categoryId: number) => {
+    navigate({
+      to: '/admin/categories/edit/$categoryId',
+      params: { categoryId },
+    });
+  };
+  const handleDelete = (category: Category) => {
+    setSelectedCategory(category);
+    setOpenDeleteModal(true);
+  };
+
   if (isLoading) {
     return (
       <div className="w-full border rounded-md p-8">
         <div className="flex justify-center items-center h-32">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-          <span className="ml-2">Đang tải danh mục...</span>
+          <Loading type="div" />
         </div>
       </div>
     );
@@ -73,7 +78,7 @@ export function CategoryTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[80px]">ID</TableHead>
+            <TableHead className="w-20">ID</TableHead>
             <TableHead className="w-[150px]">Tên danh mục</TableHead>
             <TableHead>Mô tả</TableHead>
             <TableHead className="w-[100px]">Hình ảnh</TableHead>
@@ -135,7 +140,9 @@ export function CategoryTable({
                             variant="ghost"
                             size="sm"
                             className="h-8 w-8 p-0 hover:bg-blue-100 hover:text-blue-700"
-                            onClick={() => onViewDetails(category.category_id, category.category_name_vn)}
+                            onClick={() =>
+                              onViewDetails(category.category_id, category.category_name_vn)
+                            }
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -145,44 +152,38 @@ export function CategoryTable({
                         </TooltipContent>
                       </Tooltip>
                     )}
-
                     {/* Nút chỉnh sửa */}
-                    {onEdit && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 hover:bg-orange-100 hover:text-orange-700"
-                            onClick={() => onEdit(category.category_id)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Chỉnh sửa</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
-
-                    {/* Nút xóa */}
-                    {onDelete && (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
-                            onClick={() => onDelete(category.category_id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Xóa</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    )}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:bg-orange-100 hover:text-orange-700"
+                          onClick={() => handleEdit(category.category_id)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Chỉnh sửa</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    {/* Nút xóa */} (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
+                          onClick={() => handleDelete(category)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Xóa</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                 </TooltipProvider>
               </TableCell>
@@ -190,6 +191,15 @@ export function CategoryTable({
           ))}
         </TableBody>
       </Table>
+
+      {/* Modal xóa danh mục */}
+      {openDeleteModal && selectedCategory && (
+        <CategoryDeleteModal
+          setOpenDeleteModal={setOpenDeleteModal}
+          category={selectedCategory}
+          onSuccess={handleDeleteSuccess}
+        />
+      )}
     </div>
   );
 }

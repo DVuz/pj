@@ -10,10 +10,13 @@ import {
 } from '@/components/ui/table';
 import { useNavigate } from '@tanstack/react-router';
 import { Eye, Pencil, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import ProductDeleteModal from './ProductDeleteModal';
 
 interface Product {
   product_id: number;
   product_name_vn: string;
+  product_code: string;
   description_vn: string;
   price: number;
   category_id: number;
@@ -30,10 +33,13 @@ interface Product {
 interface ProductTableProps {
   data: Product[];
   isLoading: boolean;
+  onDeleteSuccess?: () => void;
 }
 
-export function ProductTable({ data, isLoading }: ProductTableProps) {
+export function ProductTable({ data, isLoading, onDeleteSuccess }: ProductTableProps) {
   const navigate = useNavigate();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleEdit = (productId: number) => {
     navigate({ to: `/admin/products/edit/${productId}` });
@@ -43,11 +49,9 @@ export function ProductTable({ data, isLoading }: ProductTableProps) {
     navigate({ to: `/admin/products/detail/${productId}` });
   };
 
-  const handleDelete = (productId: number, productName: string) => {
-    if (confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${productName}"?`)) {
-      // TODO: Implement delete functionality
-      console.log('Delete product:', productId);
-    }
+  const handleDelete = (product: Product) => {
+    setSelectedProduct(product);
+    setOpenDeleteModal(true);
   };
 
   if (isLoading) {
@@ -165,7 +169,7 @@ export function ProductTable({ data, isLoading }: ProductTableProps) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => handleDelete(product.product_id, product.product_name_vn)}
+                    onClick={() => handleDelete(product)}
                     className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                     title="Xóa"
                   >
@@ -177,6 +181,14 @@ export function ProductTable({ data, isLoading }: ProductTableProps) {
           ))}
         </TableBody>
       </Table>
+
+      {openDeleteModal && (
+        <ProductDeleteModal
+          setOpenDeleteModal={setOpenDeleteModal}
+          product={selectedProduct}
+          onSuccess={onDeleteSuccess}
+        />
+      )}
     </div>
   );
 }

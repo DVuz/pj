@@ -4,10 +4,15 @@ const authMiddleware = require('../middlewares/auth.middlware');
 const upload = require('../config/multer');
 const  createProduct  = require('../controller/product/createProduct.controller');
 const getProduct = require('../controller/product/getProduct.controller');
-const getProducDetailById = require('../controller/product/getDetailProductById.controller');
+const getDetailProductById = require('../controller/product/getDetailProductById.controller');
 const updateProduct = require('../controller/product/updateProduct.controller');
+const deleteProductById = require('../controller/product/deleteProductById.controller');
 
-router.get('/:product_id', getProducDetailById);
+router.delete('/:product_id',
+  authMiddleware('Admin'),
+  deleteProductById);
+
+router.get('/:product_id', getDetailProductById);
 router.put(
   '/:product_id',
   // authMiddleware(),

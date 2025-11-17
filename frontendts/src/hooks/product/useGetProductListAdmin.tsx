@@ -69,7 +69,7 @@ export const useGetProductListAdmin = () => {
   console.log('Query after filter:', filteredQuery);
 
   // Connect to the API using RTK Query - disable retry on error
-  const { data, isLoading, error, isFetching } = useGetProductsQuery(filteredQuery, {
+  const { data, isLoading, error, isFetching, refetch } = useGetProductsQuery(filteredQuery, {
     // Tắt hoàn toàn auto-retry và refetch
     refetchOnMountOrArgChange: false,
     refetchOnFocus: false,
@@ -197,5 +197,6 @@ export const useGetProductListAdmin = () => {
     handleProductTypeChange,
     handlePriceRangeChange,
     handleClearFilters,
+    refetch,
   };
 };

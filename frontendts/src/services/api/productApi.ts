@@ -9,7 +9,7 @@ export const productApi = createApi({
   refetchOnFocus: false,
   refetchOnReconnect: false,
   endpoints: builder => ({
-    // Tạo mới product (POST, có thể kèm file)
+    //create product (POST, may include file)
     createProduct: builder.mutation({
       query: formData => ({
         url: '/products',
@@ -17,7 +17,7 @@ export const productApi = createApi({
         body: formData,
       }),
     }),
-    // Cập nhật product (PUT/PATCH, có thể kèm file)
+    // Update product (PUT/PATCH, may include file)
     updateProduct: builder.mutation({
       query: ({ productId, formData }) => ({
         url: `/products/${productId}`,
@@ -25,15 +25,22 @@ export const productApi = createApi({
         body: formData,
       }),
     }),
-    // Lấy danh sách product (GET, truyền query params)
+    // delete product by id
+    deleteProduct: builder.mutation({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: 'DELETE',
+      }),
+    }),
+    // Get list of products (GET, with query params)
     getProducts: builder.query({
       query: params => {
-        // Loại bỏ các giá trị không hợp lệ trước khi tạo query string
+        // Remove invalid values before creating query string
         const cleanedParams: Record<string, string> = {};
 
         if (params) {
           Object.entries(params).forEach(([key, value]) => {
-            // Chỉ thêm vào nếu giá trị hợp lệ
+            // Only add if the value is valid
             if (value !== null && value !== undefined && value !== '' && !Number.isNaN(value)) {
               cleanedParams[key] = String(value);
             }
@@ -73,4 +80,5 @@ export const {
   useUpdateProductMutation,
   useGetProductsQuery,
   useGetProductByIdQuery,
+  useDeleteProductMutation,
 } = productApi;

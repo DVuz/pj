@@ -4,8 +4,9 @@ import { baseQueryWithReauth } from '../query';
 export const productTypeApi = createApi({
   reducerPath: 'productTypeApi',
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['ProductTypes'],
   endpoints: builder => ({
-    // Tạo mới product type (POST, có thể kèm file)
+    //create product type (POST, included file)
     createProductType: builder.mutation({
       query: formData => ({
         url: '/productTypes/create',
@@ -13,7 +14,7 @@ export const productTypeApi = createApi({
         body: formData, // formData là instance của FormData
       }),
     }),
-    // Lấy danh sách product type (GET, truyền query params)
+    //get product types (GET) included query params
     getProductTypes: builder.query({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
@@ -22,8 +23,38 @@ export const productTypeApi = createApi({
           method: 'GET',
         };
       },
+      providesTags: () => [{ type: 'ProductTypes', id: 'LIST' }],
+    }),
+    //get product type by id (GET)
+    getProductTypeById: builder.query({
+      query: id => ({
+        url: `/productTypes/${id}`,
+        method: 'GET',
+      }),
+    }),
+    //delete product type by id (DELETE)
+    deleteProductTypeById: builder.mutation({
+      query: (productTypeId: number) => ({
+        url: `/productTypes/${productTypeId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'ProductTypes', id: 'LIST' }],
+    }),
+    //update product type by id (PUT, included file)
+    updateProductTypeById: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/productTypes/${id}`,
+        method: 'PUT',
+        body: formData,
+      }),
     }),
   }),
 });
 
-export const { useCreateProductTypeMutation, useGetProductTypesQuery } = productTypeApi;
+export const {
+  useCreateProductTypeMutation,
+  useGetProductTypesQuery,
+  useDeleteProductTypeByIdMutation,
+  useUpdateProductTypeByIdMutation,
+  useGetProductTypeByIdQuery,
+} = productTypeApi;

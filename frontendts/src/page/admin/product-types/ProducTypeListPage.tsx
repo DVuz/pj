@@ -1,10 +1,13 @@
-import { useEffect } from 'react';
-import { CustomPagination } from '@/components/ui/custome/CustomPagination';
-import { useGetProductTypes } from '@/hooks/product-type/useGetProductType';
 import FilterPTHeader from '@/components/admin/product-type/FilterPTHeader';
 import ProductTypeTable from '@/components/admin/product-type/ProductTypeTable';
+import { CustomPagination } from '@/components/ui/custome/CustomPagination';
+import { useGetProductTypes } from '@/hooks/product-type/useGetProductType';
+import { useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 const ProductTypeListPage = () => {
+  const navigate = useNavigate();
   const {
     query,
     pagination,
@@ -18,6 +21,7 @@ const ProductTypeListPage = () => {
     handleSortChange,
     handleSubcategoryChange,
     handleRefreshQuery,
+    refetch,
   } = useGetProductTypes();
 
   useEffect(() => {
@@ -32,7 +36,10 @@ const ProductTypeListPage = () => {
 
   const handleEdit = (id: number) => {
     console.log('Edit product type:', id);
-    // Implement edit logic
+    navigate({
+      to: '/admin/product-types/edit/$productTypeId',
+      params: { productTypeId: id.toString() },
+    });
   };
 
   const handleDelete = (id: number) => {
@@ -40,8 +47,14 @@ const ProductTypeListPage = () => {
     // Implement delete logic
   };
 
+  const handleDeleteSuccess = () => {
+    // Refetch data sau khi xóa thành công
+    refetch();
+  };
+
   return (
     <div className="space-y-4">
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Quản lý loại sản phẩm</h1>
 
       {/* Bộ lọc */}
@@ -63,7 +76,7 @@ const ProductTypeListPage = () => {
         isLoading={isLoading}
         onViewDetails={handleViewDetails}
         onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDeleteSuccess={handleDeleteSuccess}
       />
 
       {/* Phân trang */}

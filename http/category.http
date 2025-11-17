@@ -1,4 +1,5 @@
 ### GET detail category by id with subcategories, producttypes, products
 GET {{baseUrl}}/category/1
 
-###
+### Get ALL subcategories by category id
+GET {{baseUrl}}/subcategories/1

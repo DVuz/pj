@@ -7,8 +7,21 @@ const upload = require('../config/multer');
 
 const getCategory = require('../controller/category/getCategory.controller');
 const getDetailCategoryWithID = require('../controller/category/getDetailCategoryWithID.controller');
+const updateCategory = require('../controller/category/updatecategory.controller');
+const deleteCategoryById = require('../controller/category/deleteCategory.controller');
 
+router.delete(
+  '/:category_id',
+  authMiddleware("Admin"),
+  deleteCategoryById
+);
 
+router.put(
+  '/:category_id',
+  authMiddleware("Admin"),
+  upload.fields([{ name: 'categoryImage', maxCount: 1 }]),
+  updateCategory
+);
 
 router.post(
   '/create',

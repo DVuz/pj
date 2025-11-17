@@ -30,7 +30,7 @@ export const useGetCategory = () => {
   ) as Partial<CategoryQuery>;
 
   // Connect to the API using RTK Query
-  const { data, isLoading, error } = useGetCategoriesQuery(filteredQuery);
+  const { data, isLoading, error, refetch } = useGetCategoriesQuery(filteredQuery);
 
   // Log data to console whenever it changes
   useEffect(() => {
@@ -96,6 +96,7 @@ export const useGetCategory = () => {
     data: data?data?.data?.categories || []:[],
     isLoading,
     error,
+    refetch,
     handlePageChange,
     handleLimitChange,
     handleSearchChange,

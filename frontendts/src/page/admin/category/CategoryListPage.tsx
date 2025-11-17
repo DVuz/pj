@@ -5,6 +5,7 @@ import {useGetCategory} from '@/hooks/category/useGetCategory';
 import {CategoryTable} from '@/components/admin/category/CategoryTable';
 // import { useToast } from '@/components/ui/use-toast';
 import slugify from '@/utils/slugify';
+import { Toaster } from 'react-hot-toast';
 
 export default function CategoryTest() {
   // const { toast } = useToast();
@@ -20,6 +21,7 @@ export default function CategoryTest() {
     handleSearchChange,
     handleStatusChange,
     handleSortChange,
+    refetch,
   } = useGetCategory();
 
   // Additional logging in the component
@@ -44,9 +46,14 @@ export default function CategoryTest() {
   const handleDelete = () => {
     // Thêm logic xóa tại đây
   };
+  const handleDeleteSuccess = () => {
+    // Refetch data sau khi xóa thành công
+    refetch();
+  }
 
   return (
     <div className="space-y-4">
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Quản lý danh mục</h1>
 
       {/* Filter Header with props */}
@@ -67,6 +74,7 @@ export default function CategoryTest() {
         onViewDetails={handleViewDetails}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onDeleteSuccess={handleDeleteSuccess}
       />
 
       <CustomPagination

@@ -32,7 +32,7 @@ export const useGetSubcategory = () => {
 		})
 	) as Partial<SubcategoryQuery>;
 
-	const { data, isLoading, error } = useGetSubcategoriesQuery(filteredQuery);
+	const { data, isLoading, error, refetch } = useGetSubcategoriesQuery(filteredQuery);
 
 	useEffect(() => {
 		console.log("Subcategory API response:", data);
@@ -121,6 +121,7 @@ export const useGetSubcategory = () => {
 		data: data ? data.data?.subcategories || [] : [],
 		isLoading,
 		error,
+		refetch,
 		handlePageChange,
 		handleLimitChange,
 		handleStatusChange,

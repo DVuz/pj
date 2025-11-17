@@ -1,3 +1,6 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Table,
   TableBody,
@@ -6,19 +9,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Edit, Trash2, Eye} from 'lucide-react';
 import type { ProductType } from '@/types/product-type.type';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Edit, Eye, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import ProductTypeDeleteModal from '../producttype/ProductTypeDeleteModal';
 
 interface ProductTypeTableProps {
   data: ProductType[];
   isLoading: boolean;
   onViewDetails?: (id: number) => void;
   onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
   onViewProduct?: (productId: number) => void;
+  onDeleteSuccess?: () => void;
 }
 
 export function ProductTypeTable({
@@ -26,9 +28,16 @@ export function ProductTypeTable({
   isLoading,
   onViewDetails,
   onEdit,
-  onDelete,
   onViewProduct,
+  onDeleteSuccess,
 }: ProductTypeTableProps) {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedProductType, setSelectedProductType] = useState<ProductType | null>(null);
+
+  const handleDelete = (productType: ProductType) => {
+    setSelectedProductType(productType);
+    setOpenDeleteModal(true);
+  };
 
   // Hiển thị trạng thái đang tải
   if (isLoading) {
@@ -119,7 +128,6 @@ export function ProductTypeTable({
                   {getShortDescription(productType.description_vn)}
                 </div>
               </TableCell>
-
 
               <TableCell className="text-center">
                 <Popover>
@@ -213,22 +221,28 @@ export function ProductTypeTable({
                       <Edit className="h-4 w-4" />
                     </Button>
                   )}
-                  {onDelete && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
-                      onClick={() => onDelete(productType.product_type_id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-700"
+                    onClick={() => handleDelete(productType)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {openDeleteModal && selectedProductType && (
+        <ProductTypeDeleteModal
+          productType={selectedProductType}
+          setOpenDeleteModal={setOpenDeleteModal}
+          onSuccess={onDeleteSuccess}
+        />
+      )}
     </div>
   );
 }

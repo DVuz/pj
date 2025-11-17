@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import {
   Bold,
-  Italic,
-  List,
-  ListOrdered,
+  Code,
   Heading1,
   Heading2,
   Heading3,
-  Code,
+  Italic,
+  List,
+  ListOrdered,
   Quote,
   Redo,
   Undo,
-  // Link,
 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface TiptapEditorProps {
   label?: string;
@@ -77,11 +76,15 @@ const TipTapEditor: React.FC<TiptapEditorProps> = ({
 
   // Cập nhật content khi value prop thay đổi từ bên ngoài
   useEffect(() => {
-    if (editor && value !== editorContent) {
-      editor.commands.setContent(value);
-      setEditorContent(value);
+    if (editor && value !== undefined && value !== null) {
+      const currentContent = editor.getHTML();
+      if (currentContent !== value) {
+        editor.commands.setContent(value);
+        setEditorContent(value);
+      }
     }
-  }, [editor, value, editorContent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editor, value]);
 
   // Toolbar button component
   const ToolbarButton = ({

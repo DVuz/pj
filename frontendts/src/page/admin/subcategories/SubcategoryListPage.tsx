@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
-import { CustomPagination } from '@/components/ui/custome/CustomPagination';
-import { useGetSubcategory } from '@/hooks/subcategory/useGetSubcategory.ts';
 import FilterSubcategory from '@/components/admin/subcategory/FilterSubcategory';
 import SubcategoryTable from '@/components/admin/subcategory/SubcategoryTable';
+import { CustomPagination } from '@/components/ui/custome/CustomPagination';
+import { useGetSubcategory } from '@/hooks/subcategory/useGetSubcategory.ts';
+import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 
 const SubcategoryListPage = () => {
   const {
@@ -18,6 +19,7 @@ const SubcategoryListPage = () => {
     handleSortChange,
     handleCategoryChange,
     handleRefreshQuery,
+    refetch,
   } = useGetSubcategory();
 
   useEffect(() => {
@@ -30,18 +32,14 @@ const SubcategoryListPage = () => {
     // Implement view logic
   };
 
-  const handleEdit = (id: number) => {
-    console.log('Edit subcategory:', id);
-    // Implement edit logic
-  };
-
-  const handleDelete = (id: number) => {
-    console.log('Delete subcategory:', id);
-    // Implement delete logic
+  const handleDeleteSuccess = () => {
+    // Refetch data sau khi xóa thành công
+    refetch();
   };
 
   return (
     <div className="space-y-4">
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Quản lý danh mục con</h1>
 
       {/* Bộ lọc */}
@@ -62,8 +60,7 @@ const SubcategoryListPage = () => {
         data={data || []}
         isLoading={isLoading}
         onViewDetails={handleViewDetails}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
+        onDeleteSuccess={handleDeleteSuccess}
       />
 
       {/* Phân trang */}

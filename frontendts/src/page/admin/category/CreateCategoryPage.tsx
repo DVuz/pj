@@ -1,13 +1,13 @@
 import React from 'react';
 // import { Toaster } from 'react-hot-toast';
+import { STATUS_OPTIONS } from '@/constants/categoryConstants.ts';
+import { useCategoryForm } from '@/hooks/category/useCategoryForm.tsx';
 import ImageUpload from '../../../components/admin/ImageUpload';
 import Button from '../../../components/ui/custome/Button';
 import Input from '../../../components/ui/custome/Input';
 import Select from '../../../components/ui/custome/Select';
+import Textarea from '../../../components/ui/custome/Textarea';
 import Loading from '../../../components/ui/Loading';
-import TipTapEditor from '../../../components/ui/TipTapEditor.tsx';
-import { STATUS_OPTIONS } from '@/constants/categoryConstants.ts';
-import { useCategoryForm } from '@/hooks/category/useCategoryForm.tsx';
 
 const CreateCategoryPage: React.FC = () => {
   const {
@@ -39,7 +39,7 @@ const CreateCategoryPage: React.FC = () => {
             disabled={isLoading}
           />
 
-          <TipTapEditor
+          <Textarea
             label="Mô tả danh mục"
             name="descriptionVn"
             value={formData.descriptionVn}
