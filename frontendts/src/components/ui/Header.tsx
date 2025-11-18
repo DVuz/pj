@@ -1,9 +1,11 @@
 import { useGetCategoriesQuery } from '@/services/api/categoryApi.ts';
 import type { Category } from '@/types/category.type';
 import { generateSubcategoryUrl } from '@/utils/productUrl';
+import { selectFavoritesCount } from '@/slices/favoriteProductSlice';
 import { Link } from '@tanstack/react-router';
-import { ChevronDown, Menu, ShoppingCart, X } from 'lucide-react';
+import { ChevronDown, Heart, Menu, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import SearchResultsDropdown from './SearchResultsDropdown';
 import UserInfo from './UserInfo';
 
@@ -19,6 +21,7 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isProductDropdownOpen, setIsProductDropdownOpen] = useState<boolean>(false);
   const cartItemCount = 10;
+  const favoritesCount = useSelector(selectFavoritesCount);
 
   const { data: categoriesData } = useGetCategoriesQuery({});
 
@@ -114,7 +117,7 @@ const Header: React.FC = () => {
             </nav>
           </div>
 
-          {/* Right Section: Search + Avatar + Cart */}
+          {/* Right Section: Search + Avatar + Favorites + Cart */}
           <div className="flex items-center gap-3 shrink-0">
             {/* Search Input - Hidden on mobile */}
             <div className="hidden md:block w-96 relative">
@@ -126,10 +129,25 @@ const Header: React.FC = () => {
               <UserInfo />
             </div>
 
+            {/* Favorites */}
+            <Link
+              to="/favorite"
+              className="relative p-2 hover:bg-green-700 rounded-lg transition-colors shrink-0"
+              title="Danh sách yêu thích"
+            >
+              <Heart size={24} className="md:w-6 md:h-6" />
+              {favoritesCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {favoritesCount > 99 ? '99+' : favoritesCount}
+                </span>
+              )}
+            </Link>
+
             {/* Shopping Cart */}
             <Link
               to="/cart"
               className="relative p-2 hover:bg-green-700 rounded-lg transition-colors shrink-0"
+              title="Giỏ hàng"
             >
               <ShoppingCart size={24} className="md:w-6 md:h-6" />
               {cartItemCount > 0 && (

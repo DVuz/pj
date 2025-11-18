@@ -76,6 +76,7 @@ const getSubcategory = async (req, res) => {
           sc.subcategory_name_vn,
           sc.status,
           sc.created_at,
+          sc.image_url,
           COUNT(DISTINCT pt.product_type_id) AS product_type_count,
           COUNT(DISTINCT CASE WHEN sc.status = 'active' THEN sc.subcategory_id END) AS active_product_type_count
         FROM
@@ -124,6 +125,7 @@ const getSubcategory = async (req, res) => {
         totalPages,
       },
     };
+
     await setCache(cacheKey, response, 60);
     return successResponse(res, response, 200, 'Get subcategories successfully', 'mysql');
   } catch (err) {

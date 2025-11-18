@@ -96,7 +96,7 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
   };
 
   return (
-    <div className="w-full flex">
+    <div className="w-full">
       <div
         role="radiogroup"
         aria-label="Product types"
@@ -112,7 +112,7 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
               role="radio"
               aria-checked={selected}
               onClick={() => handleSelect(id)}
-              className={`inline-flex items-center justify-center px-4 py-2 min-w-[100px] h-10 rounded-lg transition-all text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+              className={`inline-flex items-center justify-center px-3 sm:px-4 py-2 min-w-[80px] sm:min-w-[100px] h-9 sm:h-10 rounded-lg transition-all text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 ${
                 selected
                   ? 'bg-blue-600 text-white ring-blue-500 shadow-md'
                   : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'

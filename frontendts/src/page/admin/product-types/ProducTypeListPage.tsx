@@ -41,11 +41,7 @@ const ProductTypeListPage = () => {
       params: { productTypeId: id.toString() },
     });
   };
-
-  const handleDelete = (id: number) => {
-    console.log('Delete product type:', id);
-    // Implement delete logic
-  };
+  
 
   const handleDeleteSuccess = () => {
     // Refetch data sau khi xóa thành công

@@ -21,6 +21,9 @@ interface CategoryTableProps {
   isLoading: boolean;
   onViewDetails?: (category_id: number, category_name_v: string) => void;
   handleDeleteSuccess?: () => void;
+  onEdit?: (category_id: number) => void;
+  onDelete?: () => void;
+  onDeleteSuccess?: () => void;
 }
 
 export function CategoryTable({

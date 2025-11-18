@@ -30,16 +30,16 @@ const userMenuItems = [
   {
     id: 'manage-store',
     display: 'Quản lý cửa hàng',
-    path: '/manage-store',
+    path: '/admin',
     icon: BarChart3,
-    role_required: 'admin',
+    role_required: 'Admin',
   },
   {
     id: 'messages',
     display: 'Tin nhắn',
     path: '/messages',
     icon: MessageCircle,
-    role_required: 'admin',
+    role_required: 'Admin',
   },
   { id: 'help', display: 'help', path: '/help', icon: HelpCircle },
 ];
@@ -69,7 +69,7 @@ const { userInfo } = useSelector((state: RootState) => state.authInfo);
           </div>
 
           {showMenu && (
-            <div className="absolute top-full right-0 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] w-[280px] z-[1000] mt-2 overflow-hidden">
+            <div className="absolute top-full right-0 bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] w-[280px] z-1000 mt-2 overflow-hidden">
               <div className="flex items-center p-5 bg-gray-50 border-b border-gray-200">
                 <img
                   src={defaultAvatar}
@@ -119,7 +119,7 @@ const { userInfo } = useSelector((state: RootState) => state.authInfo);
         <div>
           <Link
             to="/login"
-            className="inline-flex items-center gap-2 py-2.5 px-6 bg-[var(--yellow-primary)] text-white text-[15px] font-semibold rounded-3xl hover:bg-gradient-to-r hover:from-[#ffb347] hover:to-[#ff6b35] hover:shadow-[0_4px_16px_rgba(255,107,53,0.25)] transition-all"
+            className="inline-flex items-center gap-2 py-2.5 px-6 bg-(--yellow-primary) text-white text-[15px] font-semibold rounded-3xl hover:bg-linear-to-r hover:from-[#ffb347] hover:to-[#ff6b35] hover:shadow-[0_4px_16px_rgba(255,107,53,0.25)] transition-all"
           >
             Đăng nhập
           </Link>

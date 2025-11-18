@@ -51,7 +51,7 @@ const SortOrder: React.FC<SortOrderProps> = ({ onSortChange, initialSortBy, init
 
   return (
     <Select onValueChange={handleValueChange} value={getInitialValue()}>
-      <SelectTrigger className="w-44 h-10 border border-gray-300">
+      <SelectTrigger className="w-full sm:w-44 h-10 border border-gray-300 text-xs sm:text-sm">
         <SelectValue placeholder="Sắp xếp" />
       </SelectTrigger>
       <SelectContent>

@@ -58,13 +58,7 @@ const ProductList: React.FC<ProductListProps> = ({ products = [], loading = fals
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 gap-3 sm:gap-6">
       {products.map(product => (
-        <ProductCard
-          key={product.product_id}
-          product={product}
-          // Có thể thêm logic để check sản phẩm có trong giỏ hàng không
-          inCart={Math.random() > 0.7} // Random để demo
-          cartCount={Math.floor(Math.random() * 3) + 1}
-        />
+        <ProductCard key={product.product_id} product={product} />
       ))}
     </div>
   );
