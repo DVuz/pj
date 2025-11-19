@@ -20,7 +20,10 @@ app.use(
 );
 
 app.use('/api', routes);
-
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 // Start server
 app.listen(port, '0.0.0.0', () => {
