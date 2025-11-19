@@ -1,7 +1,7 @@
 import { useGetCategoriesQuery } from '@/services/api/categoryApi.ts';
+import { selectFavoritesCount } from '@/slices/favoriteProductSlice';
 import type { Category } from '@/types/category.type';
 import { generateSubcategoryUrl } from '@/utils/productUrl';
-import { selectFavoritesCount } from '@/slices/favoriteProductSlice';
 import { Link } from '@tanstack/react-router';
 import { ChevronDown, Heart, Menu, ShoppingCart, X } from 'lucide-react';
 import { useState } from 'react';
@@ -29,7 +29,6 @@ const Header: React.FC = () => {
     { id: 'ddstore', display: 'DDStore', path: '/', isLogo: true },
     { id: 'about', display: 'Về chúng tôi', path: '/about' },
     { id: 'catalog', display: 'Sản phẩm', path: '/catalog', isProducts: true },
-    // { id: 'privacy', display: 'Chính sách bảo mật', path: '/privacy' },
     { id: 'contact', display: 'Liên hệ', path: '/contact' },
   ];
 
@@ -38,6 +37,10 @@ const Header: React.FC = () => {
   };
 
   const categories: Category[] = categoriesData?.data.categories || [];
+
+  // Lọc chỉ lấy danh mục "Nội thất gia đình"
+  const furnitureCategory = categories.find(cat => cat.category_name_vn === 'Nội thất gia đình');
+  const subcategories = furnitureCategory?.subcategories || [];
 
   return (
     <header className="bg-(--green-primary) text-white shadow-lg sticky top-0 z-50">
@@ -79,34 +82,27 @@ const Header: React.FC = () => {
                     </Link>
 
                     {/* Desktop Product Dropdown */}
-                    {item.isProducts && isProductDropdownOpen && (
-                      <div className="absolute top-full left-0 pt-2">
-                        <div className="bg-white text-gray-800 rounded-lg shadow-xl min-w-[600px] p-6">
-                          <div className="grid grid-cols-2 gap-8">
-                            {categories.map(category => (
-                              <div key={category.category_id}>
-                                <h3 className="font-bold text-lg mb-3 text-green-800 border-b pb-2">
-                                  {category.category_name_vn}
-                                </h3>
-                                <ul className="space-y-2">
-                                  {category.subcategories?.map(subcategory => (
-                                    <li key={subcategory.subcategory_id}>
-                                      <Link
-                                        to={generateSubcategoryUrl(
-                                          category.category_name_vn,
-                                          category.category_id,
-                                          subcategory.subcategory_name_vn,
-                                          subcategory.subcategory_id
-                                        )}
-                                        className="text-sm hover:text-green-700 hover:translate-x-1 transition-all inline-block"
-                                        onClick={() => setIsProductDropdownOpen(false)}
-                                      >
-                                        {subcategory.subcategory_name_vn}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
+                    {item.isProducts && isProductDropdownOpen && furnitureCategory && (
+                      <div className="absolute top-full left-0 pt-2 z-50">
+                        <div className="bg-white text-gray-800 rounded-lg shadow-xl min-w-[500px] max-w-[600px] p-6">
+                          <h3 className="font-bold text-lg mb-4 text-green-800 border-b pb-3">
+                            {furnitureCategory.category_name_vn}
+                          </h3>
+                          <div className="grid grid-cols-2 gap-3">
+                            {subcategories.map(subcategory => (
+                              <Link
+                                key={subcategory.subcategory_id}
+                                to={generateSubcategoryUrl(
+                                  furnitureCategory.category_name_vn,
+                                  furnitureCategory.category_id,
+                                  subcategory.subcategory_name_vn,
+                                  subcategory.subcategory_id
+                                )}
+                                className="text-sm hover:text-green-700 hover:bg-green-50 p-2 rounded transition-all block"
+                                onClick={() => setIsProductDropdownOpen(false)}
+                              >
+                                {subcategory.subcategory_name_vn}
+                              </Link>
                             ))}
                           </div>
                         </div>
@@ -182,33 +178,29 @@ const Header: React.FC = () => {
                   </Link>
 
                   {/* Mobile Product List */}
-                  {item.isProducts && (
-                    <div className="ml-4 mt-2 space-y-3">
-                      {categories.map(category => (
-                        <div key={category.category_id}>
-                          <h4 className="font-semibold text-yellow-300 mb-2">
-                            {category.category_name_vn}
-                          </h4>
-                          <ul className="ml-4 space-y-1">
-                            {category.subcategories?.map(subcategory => (
-                              <li key={subcategory.subcategory_id}>
-                                <Link
-                                  to={generateSubcategoryUrl(
-                                    category.category_name_vn,
-                                    category.category_id,
-                                    subcategory.subcategory_name_vn,
-                                    subcategory.subcategory_id
-                                  )}
-                                  className="text-sm text-gray-200 hover:text-yellow-400"
-                                  onClick={() => setIsMenuOpen(false)}
-                                >
-                                  {subcategory.subcategory_name_vn}
-                                </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                  {item.isProducts && furnitureCategory && (
+                    <div className="ml-4 mt-2 space-y-2">
+                      <h4 className="font-semibold text-yellow-300 mb-2">
+                        {furnitureCategory.category_name_vn}
+                      </h4>
+                      <ul className="ml-4 space-y-1">
+                        {subcategories.map(subcategory => (
+                          <li key={subcategory.subcategory_id}>
+                            <Link
+                              to={generateSubcategoryUrl(
+                                furnitureCategory.category_name_vn,
+                                furnitureCategory.category_id,
+                                subcategory.subcategory_name_vn,
+                                subcategory.subcategory_id
+                              )}
+                              className="text-sm text-gray-200 hover:text-yellow-400"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {subcategory.subcategory_name_vn}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                 </div>
