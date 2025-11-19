@@ -193,4 +193,3 @@ export function ProductTable({ data, isLoading, onDeleteSuccess }: ProductTableP
   );
 }
 
-export default ProductTable;

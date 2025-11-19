@@ -13,7 +13,7 @@ import {
   Redo,
   Undo,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 interface TiptapEditorProps {
   label?: string;
@@ -40,7 +40,6 @@ const TipTapEditor: React.FC<TiptapEditorProps> = ({
   disabled = false,
   className = '',
 }) => {
-  const [editorContent, setEditorContent] = useState<string>(value);
 
   // Khởi tạo editor với các extension từ starter-kit
   const editor = useEditor({
@@ -55,7 +54,6 @@ const TipTapEditor: React.FC<TiptapEditorProps> = ({
     editable: !disabled,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      setEditorContent(html);
 
       if (onChange) {
         onChange({
@@ -80,7 +78,6 @@ const TipTapEditor: React.FC<TiptapEditorProps> = ({
       const currentContent = editor.getHTML();
       if (currentContent !== value) {
         editor.commands.setContent(value);
-        setEditorContent(value);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

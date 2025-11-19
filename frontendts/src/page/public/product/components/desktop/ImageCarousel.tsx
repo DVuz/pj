@@ -7,9 +7,8 @@ interface ImageCarouselProps {
   productName: string;
 }
 
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ mainImage, subImages, productName, product }) => {
+const ImageCarousel: React.FC<ImageCarouselProps> = ({ mainImage, subImages, productName }) => {
   // Giới hạn tối đa 10 ảnh để UX tốt hơn
-  console.log('Rendering ImageCarousel with images:', { product });
   const maxImages = 10;
   const limitedSubImages = subImages.slice(0, maxImages - 1);
   const allImages = [mainImage, ...limitedSubImages];

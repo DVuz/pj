@@ -21,6 +21,7 @@ interface Product {
   product_name_vn: string;
   description_vn: string;
   price: number;
+  product_code: string;
   category_id: number;
   subcategory_id: number;
   product_type_id: number;

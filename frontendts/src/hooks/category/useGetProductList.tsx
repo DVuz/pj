@@ -20,6 +20,7 @@ interface ProductQuery {
 interface Product {
   product_id: number;
   product_name_vn: string;
+  product_code: string;
   description_vn: string;
   price: number;
   category_id: number;

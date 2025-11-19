@@ -77,7 +77,6 @@ const ProductDetailPage: React.FC = () => {
                 mainImage={product.main_image}
                 subImages={product.sub_image || []}
                 productName={product.product_name_vn}
-                product={product}
               />
             </div>
 

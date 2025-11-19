@@ -1,5 +1,5 @@
 import ProductFilterHeader from '@/components/admin/product/ProductFilterHeader';
-import { ProductTable } from '@/components/admin/product/ProductTable';
+import { ProductTable} from '@/components/admin/product/ProductTable';
 import { CustomPagination } from '@/components/ui/custome/CustomPagination';
 import { useGetProductListAdmin } from '@/hooks/product/useGetProductListAdmin';
 import { Toaster } from 'react-hot-toast';
