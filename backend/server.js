@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
-
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,9 +20,10 @@ app.use(
 );
 
 app.use('/api', routes);
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+
+app.use(express.static(path.join(__dirname, '../frontendts/dist')));
+app.get(/(.*)/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontendts/dist/index.html'));
 });
 
 // Start server
