@@ -74,4 +74,20 @@ export interface ProductTypeResponse {
   };
   source?: string;
 }
+
+export interface ProductTypeFormData {
+  subcategoryId: number;
+  productTypeNameVn: string;
+  descriptionVn: string;
+  status: string;
+  productTypeImage: File | null;
+}
+
+export interface ProductTypeFormErrors {
+  subcategoryId?: string;
+  productTypeNameVn?: string;
+  descriptionVn?: string;
+  status?: string;
+  productTypeImage?: string;
+}
 // ...existing code...

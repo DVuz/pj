@@ -13,6 +13,7 @@ export const productTypeApi = createApi({
         method: 'POST',
         body: formData, // formData là instance của FormData
       }),
+      invalidatesTags: [{ type: 'ProductTypes', id: 'LIST' }],
     }),
     //get product types (GET) included query params
     getProductTypes: builder.query({

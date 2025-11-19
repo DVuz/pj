@@ -18,7 +18,7 @@ const createProductType = async (req, res) => {
     console.log(snakeBody);
 
     // Validate required fields
-    const requiredFields = ['subcategory_id', 'productType_name_vn', 'description_vn', 'status'];
+    const requiredFields = ['subcategory_id', 'product_type_name_vn', 'description_vn', 'status'];
     for (const field of requiredFields) {
       if (!snakeBody[field]) {
         return errorResponse(res, {}, 400, `Missing required field: ${field}`);
@@ -26,9 +26,9 @@ const createProductType = async (req, res) => {
     }
 		let createProductTypeImageUrl = '';
     // Check if product type already exists
-    const checkProductTypeExisted = 'SELECT * FROM producttypes WHERE productType_name_vn = ?';
+    const checkProductTypeExisted = 'SELECT * FROM producttypes WHERE product_type_name_vn = ?';
     const [productTypeExisted] = await db.query(checkProductTypeExisted, [
-      snakeBody.productType_name_vn,
+      snakeBody.product_type_name_vn,
     ]);
     if (productTypeExisted.length > 0) {
       return errorResponse(res, {}, 400, 'Loại sản phẩm đã tồn tại');
@@ -52,7 +52,7 @@ const createProductType = async (req, res) => {
 		`;
     await db.query(insertProductTypeQuery, [
       snakeBody.subcategory_id,
-      snakeBody.productType_name_vn,
+      snakeBody.product_type_name_vn,
       snakeBody.description_vn,
       snakeBody.status,
       createProductTypeImageUrl,
