@@ -6,7 +6,6 @@ export const subcategoryApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Subcategories'],
   endpoints: builder => ({
-    // Tạo mới subcategory (POST, có thể kèm file)
     createSubcategory: builder.mutation({
       query: formData => ({
         url: '/subcategories/create',
@@ -14,7 +13,7 @@ export const subcategoryApi = createApi({
         body: formData,
       }),
     }),
-    // Lấy danh sách subcategory (GET, truyền query params)
+
     getSubcategories: builder.query({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';

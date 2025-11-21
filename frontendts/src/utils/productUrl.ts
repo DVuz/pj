@@ -82,10 +82,3 @@ export const generateProductUrl = (
 
   return generateShortProductUrl(categorySlug, categoryId, subcategorySlug, subcategoryId);
 };
-
-// Usage examples:
-// Short URL: generateProductUrl('noi-that-gia-dinh', 1, 'phong-khach', 1)
-// → /product/noi-that-gia-dinh-1/phong-khach-1/
-
-// Long URL: generateProductUrl('noi-that-gia-dinh', 1, 'phong-khach', 1, 'ban-tra', 5)
-// → /product/noi-that-gia-dinh-1/phong-khach-1/ban-tra-5

@@ -1,3 +1,5 @@
+import { useGetProductList } from '@/hooks/category/useGetProductList.tsx';
+import { useProductParams } from '@/hooks/product/useProductParams.tsx';
 import React from 'react';
 import {
   Select,
@@ -17,20 +19,16 @@ const sortOptions = [
   { value: 'created_at_ASC', label: 'Cũ nhất', sortBy: 'created_at', sortOrder: 'ASC' },
 ];
 
-interface SortOrderProps {
-  onSortChange: (sortBy: string, sortOrder: string) => void;
-  initialSortBy?: string;
-  initialSortOrder?: string;
-}
-
-const SortOrder: React.FC<SortOrderProps> = ({ onSortChange, initialSortBy, initialSortOrder }) => {
+const SortOrder: React.FC = () => {
+  const { filters } = useProductParams();
+  const { handleSortChange } = useGetProductList();
   const { updateUrlParams } = useUrlSync();
 
   // Determine initial value based on URL params
   const getInitialValue = () => {
-    if (initialSortBy && initialSortOrder) {
+    if (filters.sort_by && filters.sort_order) {
       const option = sortOptions.find(
-        opt => opt.sortBy === initialSortBy && opt.sortOrder === initialSortOrder
+        opt => opt.sortBy === filters.sort_by && opt.sortOrder === filters.sort_order
       );
       return option?.value || 'created_at_DESC';
     }
@@ -40,7 +38,7 @@ const SortOrder: React.FC<SortOrderProps> = ({ onSortChange, initialSortBy, init
   const handleValueChange = (value: string) => {
     const option = sortOptions.find(opt => opt.value === value);
     if (option) {
-      onSortChange(option.sortBy, option.sortOrder);
+      handleSortChange(option.sortBy, option.sortOrder);
       // Only update URL if value is different from initial
       const currentValue = getInitialValue();
       if (value !== currentValue) {

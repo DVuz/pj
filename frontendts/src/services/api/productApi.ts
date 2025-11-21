@@ -4,12 +4,10 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 export const productApi = createApi({
   reducerPath: 'productApi',
   baseQuery: baseQueryWithReauth,
-  // Tắt auto-retry để tránh fetch liên tục khi lỗi
   refetchOnMountOrArgChange: false,
   refetchOnFocus: false,
   refetchOnReconnect: false,
   endpoints: builder => ({
-    //create product (POST, may include file)
     createProduct: builder.mutation({
       query: formData => ({
         url: '/products',
@@ -17,7 +15,7 @@ export const productApi = createApi({
         body: formData,
       }),
     }),
-    // Update product (PUT/PATCH, may include file)
+
     updateProduct: builder.mutation({
       query: ({ productId, formData }) => ({
         url: `/products/${productId}`,
@@ -25,27 +23,18 @@ export const productApi = createApi({
         body: formData,
       }),
     }),
-    // delete product by id
+
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: `/products/${productId}`,
         method: 'DELETE',
       }),
     }),
-    // Get list of products (GET, with query params)
+
     getProducts: builder.query({
       query: params => {
-        // Remove invalid values before creating query string
-        const cleanedParams: Record<string, string> = {};
 
-        if (params) {
-          Object.entries(params).forEach(([key, value]) => {
-            // Only add if the value is valid
-            if (value !== null && value !== undefined && value !== '' && !Number.isNaN(value)) {
-              cleanedParams[key] = String(value);
-            }
-          });
-        }
+        const cleanedParams: Record<string, string> = {};
 
         const queryString =
           Object.keys(cleanedParams).length > 0
@@ -61,12 +50,8 @@ export const productApi = createApi({
           method: 'GET',
         };
       },
-      transformResponse: response => {
-        console.log('Raw product API response:', response);
-        return response;
-      },
     }),
-    //get detail product by id
+
     getProductById: builder.query({
       query: id => ({
         url: `/products/${id}`,

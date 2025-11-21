@@ -46,13 +46,7 @@ const ProductDetailPage: React.FC = () => {
       </div>
     );
   }
-
-  // Debug: Log số lượng ảnh
-  console.log('Product images:', {
-    main_image: product.main_image,
-    sub_image_count: product.sub_image?.length || 0,
-    total_images: (product.sub_image?.length || 0) + 1,
-  });
+  
 
   return (
     <div className="min-h-screen bg-gray-50">

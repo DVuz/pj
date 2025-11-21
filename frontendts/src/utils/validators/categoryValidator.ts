@@ -1,4 +1,4 @@
-import type { CategoryFormData, FormErrors } from '../../types/category.type';
+import type { CategoryFormData, FormErrors } from '@/types/category.type.ts';
 
 export const validateCategoryForm = (data: CategoryFormData): FormErrors => {
   const errors: FormErrors = {};

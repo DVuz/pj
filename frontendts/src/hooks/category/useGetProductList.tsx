@@ -1,36 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useGetProductsQuery } from '../../services/api/productApi';
-import type { Pagination } from '../../types/common.types';
+import { useGetProductsQuery } from '@/services/api/productApi.ts';
+import type { Pagination } from '@/types/common.types.ts';
 import { useUrlSync } from '../common/useUrlSync';
 import { useProductParams } from '../product/useProductParams';
+import type {Product,ProductQuery} from '@/types/common.types.ts';
 
-interface ProductQuery {
-  product_name_vn?: string;
-  category_id: number;
-  subcategory_id?: number;
-  product_type_id?: number;
-  min_price?: number;
-  max_price?: number;
-  sort_by?: string;
-  sort_order?: string;
-  page?: number;
-  limit?: number;
-  status?: 'active' | 'inactive' | 'all';
-}
-interface Product {
-  product_id: number;
-  product_name_vn: string;
-  product_code: string;
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
 
 export const useGetProductList = () => {
   const { updateUrlParams } = useUrlSync();
@@ -63,8 +37,8 @@ export const useGetProductList = () => {
     // Loại bỏ các giá trị null/undefined/empty string
     if (value === null || value === undefined || value === '') return false;
     // Loại bỏ các giá trị số bằng 0
-    if (typeof value === 'number' && value === 0) return false;
-    return true;
+    return !(typeof value === 'number' && value === 0);
+    
   };
 
   const filteredQuery = Object.fromEntries(

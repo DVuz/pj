@@ -9,7 +9,7 @@ import ProductTypeFilter from './components/desktop/ProductTypeFilter';
 import SortOrder from './components/desktop/SortOrder';
 
 const ProductListPage = () => {
-  const { subcategory, filters } = useProductParams();
+  const { subcategory } = useProductParams();
   const {
     data: subcategoryData,
     error: subcategoryError,
@@ -23,13 +23,8 @@ const ProductListPage = () => {
     pagination,
     handlePageChange,
     handleLimitChange,
-    handleSortChange,
-    handleProductTypeChange,
-    handlePriceRangeChange,
   } = useGetProductList();
-
-  console.log('Subcategory Data:', subcategoryData?.data);
-  console.log('Products Data:', products);
+  
 
   if (subcategoryLoading) return <Loading type="hscreen" />;
   if (subcategoryError) return <div>Error loading subcategory data</div>;
@@ -49,44 +44,31 @@ const ProductListPage = () => {
         </div>
 
         {/* Title Section */}
-        <div className="mb-3 sm:mb-4 px-1 sm:px-0">
+        <div className="mb-3 sm:mb-4 px-1 sm:px-0  ">
           <h1 className="text-lg sm:text-2xl font-bold text-gray-900">
             {subcategories?.subcategory_name_vn}
           </h1>
           {/* Breadcrumb - Mobile */}
-          <div className="text-xs sm:text-sm text-gray-500 mt-2 flex items-center flex-wrap">
-            <span className="font-medium text-gray-700">
-              {subcategories?.categoriy?.category_name_vn}
-            </span>
-            <span className="mx-1 sm:mx-2">›</span>
-            <span className="text-gray-600">{subcategories?.subcategory_name_vn}</span>
-          </div>
+          {/*<div className="text-xs sm:text-sm text-gray-500 mt-2 flex items-center flex-wrap">*/}
+          {/*  <span className="font-medium text-gray-700">*/}
+          {/*    {subcategories?.categoriy?.category_name_vn}*/}
+          {/*  </span>*/}
+          {/*  <span className="mx-1 sm:mx-2">›</span>*/}
+          {/*  <span className="text-gray-600">{subcategories?.subcategory_name_vn}</span>*/}
+          {/*</div>*/}
         </div>
 
         {/* Filter Section */}
-        <div className="mb-3 sm:mb-6">
+        <div className="mb-3 sm:mb-6 flex justify-between flex-col sm:flex-row gap-3 sm:gap-0 items-start sm:items-center">
           {/* Product Type Filter - Full width on mobile */}
-          {subcategories && (
-            <div className="mb-3">
-              <ProductTypeFilter
-                subcategories={subcategories}
-                onProductTypeChange={handleProductTypeChange}
-              />
-            </div>
-          )}
+          <div className="mb-3">
+            <ProductTypeFilter />
+          </div>
 
           {/* Price and Sort Filters - Stack on mobile */}
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-            <PriceFilter
-              onPriceRangeChange={handlePriceRangeChange}
-              initialMinPrice={filters.min_price}
-              initialMaxPrice={filters.max_price}
-            />
-            <SortOrder
-              onSortChange={handleSortChange}
-              initialSortBy={filters.sort_by}
-              initialSortOrder={filters.sort_order}
-            />
+            <PriceFilter />
+            <SortOrder />
           </div>
         </div>
 

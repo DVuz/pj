@@ -59,7 +59,7 @@ const getCategory = async (req, res) => {
     const whereClause = whereConditions.length > 0 ? `AND ${whereConditions.join(' AND ')}` : '';
 
     // Build ORDER BY clause
-    let orderByClause = '';
+    let orderByClause;
     if (sort_by === 'category_name_vn') {
       orderByClause = `c.category_name_vn ${sort_order}`;
     } else if (sort_by === 'created_at') {
@@ -118,8 +118,7 @@ const getCategory = async (req, res) => {
 
     // Get subcategories for each category
     for (const category of categories) {
-      const subcategories = await getSubcategoryByCategoryID(category.category_id);
-      category.subcategories = subcategories;
+      category.subcategories = await getSubcategoryByCategoryID(category.category_id);
     }
 
     const response = {

@@ -1,25 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useGetProductsQuery } from '../../services/api/productApi';
-
-interface Product {
-  product_id: number;
-  product_name_vn: string;
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
+import { useGetProductsQuery } from '@/services/api/productApi.ts';
 
 export const useProductSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
-  // Debounce logic: Chờ 300ms sau khi user ngừng nhập
+  // Debounce logic: wait 300ms after user stops typing
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -30,15 +16,15 @@ export const useProductSearch = () => {
     };
   }, [searchTerm]);
 
-  // Fetch products chỉ khi có debounced search term
+  // Fetch products based on debounced search term
   const { data, isLoading, error, isFetching } = useGetProductsQuery(
     {
       product_name_vn: debouncedSearchTerm,
       status: 'active',
-      limit: 10, // Giới hạn 10 kết quả
+      limit: 10,
     },
     {
-      skip: !debouncedSearchTerm || debouncedSearchTerm.trim().length < 2, // Skip nếu ít hơn 2 ký tự
+      skip: !debouncedSearchTerm || debouncedSearchTerm.trim().length < 2, // skip if less than 2 characters
     }
   );
 
@@ -54,7 +40,7 @@ export const useProductSearch = () => {
   return {
     searchTerm,
     debouncedSearchTerm,
-    products: (data?.data?.products as Product[]) || [],
+    products: (data?.data?.products) || [],
     isLoading: isLoading || isFetching,
     error,
     handleSearchChange,

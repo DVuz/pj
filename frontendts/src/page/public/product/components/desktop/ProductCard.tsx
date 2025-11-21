@@ -4,21 +4,8 @@ import { Heart } from 'lucide-react';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
+import type {Product} from '@/types/common.types.ts';
 
-// Define Product interface matching the hook's Product interface
-interface Product {
-  product_id: number;
-  product_name_vn: string;
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
 
 interface ProductCardProps {
   product: Product;
@@ -84,7 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </button>
 
         {/* Product Type Tag */}
-        <span className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-gradient-to-r from-green-500 to-green-600 text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-md">
+        <span className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-linear-to-r from-green-500 to-green-600 text-white text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-md">
           {product.product_type_name_vn}
         </span>
       </div>
@@ -93,7 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="p-2 sm:p-3 md:p-4">
         {/* Product Name */}
         <h3
-          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight mb-1 sm:mb-2 line-clamp-2 cursor-pointer hover:text-green-600 transition-colors min-h-[32px] sm:min-h-[40px]"
+          className="font-semibold text-gray-900 text-xs sm:text-sm leading-tight mb-1 sm:mb-2 line-clamp-2 cursor-pointer hover:text-green-600 transition-colors min-h-8 sm:min-h-10"
           onClick={() => handleOpenProductDetailPage(product)}
         >
           {product.product_name_vn}
@@ -121,7 +108,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
           <button
             onClick={() => handleOpenProductDetailPage(product)}
-            className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-[10px] sm:text-xs md:text-sm font-medium rounded-md sm:rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
+            className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-linear-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-[10px] sm:text-xs md:text-sm font-medium rounded-md sm:rounded-lg transition-all duration-200 shadow-md hover:shadow-lg"
           >
             Chi tiết
           </button>

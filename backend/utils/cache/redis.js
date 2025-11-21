@@ -62,6 +62,7 @@ const deleteCache = async key => {
 const deleteCachePattern = async pattern => {
   try {
     const keys = await clientRedis.keys(pattern);
+    keys.length = undefined;
     if (keys.length === 0) {
       console.log('ℹ No keys found for pattern:', pattern);
       return 0;

@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { ShoppingCart } from 'lucide-react';
 import homeImg from '../../assets/home.jpg';
 
-const Banner: React.FC = () => {
+const   Banner: React.FC = () => {
   return (
     <section className="bg-[var(--green-primary)] text-white py-24">
       <div className="max-w-[1560px] mx-auto px-5 flex flex-col lg:flex-row justify-between items-center gap-8">

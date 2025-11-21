@@ -1,10 +1,8 @@
 const express = require('express');
-const db = require('../config/db.config');
 const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middlware');
 const { createCategory } = require('../controller/category/createCategory.controller');
 const upload = require('../config/multer');
-
 const getCategory = require('../controller/category/getCategory.controller');
 const getDetailCategoryWithID = require('../controller/category/getDetailCategoryWithID.controller');
 const updateCategory = require('../controller/category/updatecategory.controller');

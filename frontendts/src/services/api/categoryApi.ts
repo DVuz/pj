@@ -6,15 +6,14 @@ export const categoryApi = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['Categories'],
   endpoints: builder => ({
-    // create category (POST, maybe with form data)
     createCategory: builder.mutation({
       query: formData => ({
         url: '/categories/create',
         method: 'POST',
-        body: formData, // formData là instance của FormData
+        body: formData
       }),
     }),
-    // get all categories with params
+    
     getCategories: builder.query({
       query: params => {
         const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
@@ -25,16 +24,14 @@ export const categoryApi = createApi({
       },
       providesTags: () =>[{ type: 'Categories', id: 'LIST' }]
     }),
-
-    //get detail category by id
+    
     getDetailCategoryById: builder.query({
       query: (id: number | string) => ({
         url: `/categories/${id}`,
         method: 'GET',
       }),
     }),
-
-    //update category by id
+    
     updateCategoryById: builder.mutation({
       query: ({ id, formData }) => ({
         url: `/categories/${id}`,
@@ -43,7 +40,6 @@ export const categoryApi = createApi({
       }),
     }),
 
-    //delete category by id
     deleteCategoryById: builder.mutation({
       query: (id: number | string) => ({
         url: `/categories/${id}`,

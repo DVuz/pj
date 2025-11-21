@@ -53,8 +53,7 @@ export function CustomPagination({
 
     return pages;
   };
-
-  // ...existing code...
+  
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       {/* Left: Info */}
@@ -107,8 +106,8 @@ export function CustomPagination({
                       isActive={pageNum === page}
                       className={`cursor-pointer transition-colors duration-150 ${
                         pageNum === page
-                          ? 'bg-[var(--green-primary)] text-white hover:bg-[var(--green-primary)]/90'
-                          : 'hover:bg-[color:var(--green-primary)_/_0.12] hover:text-[var(--green-primary)]'
+                          ? 'bg-(--green-primary) text-white hover:bg-(--green-primary)/90'
+                          : 'hover:bg-[var(--green-primary)/0.12] hover:text-(--green-primary)'
                       } px-2 py-1 rounded`}
                     >
                       {pageNum}

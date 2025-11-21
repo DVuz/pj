@@ -3,20 +3,7 @@ import { createSlug } from '@/utils/productUrl';
 import { useNavigate } from '@tanstack/react-router';
 import { Search, X } from 'lucide-react';
 import React, { useEffect, useRef } from 'react';
-
-interface Product {
-  product_id: number;
-  product_name_vn: string;
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
+import type {Product} from "@/types/common.types.ts";
 
 interface SearchResultsDropdownProps {
   onClose?: () => void;
@@ -38,10 +25,10 @@ const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = () => {
 
   // Close dropdown khi click bên ngoài (chỉ đóng dropdown, không đóng input)
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = () => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
+        !dropdownRef.current.contains &&
         searchTerm
       ) {
         clearSearch();
@@ -115,7 +102,7 @@ const SearchResultsDropdown: React.FC<SearchResultsDropdownProps> = () => {
                 <div className="px-4 py-2 text-xs text-gray-500 font-medium">
                   Tìm thấy {products.length} sản phẩm
                 </div>
-                {products.map(product => (
+                {products.map((product: Product) => (
                   <button
                     key={product.product_id}
                     onClick={() => handleProductClick(product)}

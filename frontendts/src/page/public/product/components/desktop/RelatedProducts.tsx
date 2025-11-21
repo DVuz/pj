@@ -1,22 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useRef } from 'react';
 import Loading from '../../../../../components/ui/Loading';
-import { useGetProductsQuery } from '../../../../../services/api/productApi';
+import { useGetProductsQuery } from '@/services/api/productApi.ts';
 import ProductCard from './ProductCard';
-
-interface Product {
-  product_id: number;
-  product_name_vn: string
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
+import type {Product} from '@/types/common.types.ts';
 
 interface RelatedProductsProps {
   productTypeId: number;

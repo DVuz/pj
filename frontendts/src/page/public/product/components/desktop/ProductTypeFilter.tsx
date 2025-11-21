@@ -1,18 +1,19 @@
+import { useGetProductList } from '@/hooks/category/useGetProductList.tsx';
+import { useProductParams } from '@/hooks/product/useProductParams.tsx';
+import { useGetSubcategoryByIdQuery } from '@/services/api/subcategoryApi.ts';
+import { generateProductUrl } from '@/utils/productUrl.ts';
 import React, { useEffect, useState } from 'react';
-import { useProductParams } from '../../../../../hooks/product/useProductParams';
-import { generateProductUrl } from '../../../../../utils/productUrl';
-import type { Subcategories } from '../../type.ts';
 
-interface ProductTypeFilterProps {
-  subcategories: Subcategories;
-  onProductTypeChange: (productTypeId: number) => void;
+interface ProductType {
+  product_type_id: number;
+  product_type_name_vn: string;
 }
 
-const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
-  subcategories,
-  onProductTypeChange,
-}) => {
+const ProductTypeFilter: React.FC = () => {
   const { category, subcategory, productType, hasProductType } = useProductParams();
+  const { handleProductTypeChange } = useGetProductList();
+  const { data: subcategoryData } = useGetSubcategoryByIdQuery(subcategory.id);
+  const subcategories = subcategoryData?.data;
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
   // Sync selected state with URL params
@@ -40,8 +41,8 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
     const newSelectedId = selectedId === id ? null : id;
     setSelectedId(newSelectedId);
 
-    // First call the parent handler for filtering - this will update the hook state
-    onProductTypeChange(newSelectedId || 0);
+    // First call the hook handler for filtering - this will update the hook state
+    handleProductTypeChange(newSelectedId || 0);
 
     // Then handle URL navigation with preserved search params
     const searchParams = preserveSearchParams();
@@ -49,7 +50,7 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
     if (newSelectedId) {
       // Navigate to long URL with product type
       const selectedProductType = subcategories.product_types.find(
-        pt => pt.product_type_id === newSelectedId
+        (pt: ProductType) => pt.product_type_id === newSelectedId
       );
       if (selectedProductType) {
         const productTypeSlug = selectedProductType.product_type_name_vn
@@ -95,6 +96,8 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
     }
   };
 
+  if (!subcategories?.product_types) return null;
+
   return (
     <div className="w-full">
       <div
@@ -102,7 +105,7 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
         aria-label="Product types"
         className="flex flex-row flex-wrap items-center gap-2"
       >
-        {subcategories.product_types.map(productType => {
+        {subcategories.product_types.map((productType: ProductType) => {
           const id = productType.product_type_id;
           const selected = selectedId === id;
           return (
@@ -112,7 +115,7 @@ const ProductTypeFilter: React.FC<ProductTypeFilterProps> = ({
               role="radio"
               aria-checked={selected}
               onClick={() => handleSelect(id)}
-              className={`inline-flex items-center justify-center px-3 sm:px-4 py-2 min-w-[80px] sm:min-w-[100px] h-9 sm:h-10 rounded-lg transition-all text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+              className={`inline-flex items-center justify-center px-3 sm:px-4 py-2 min-w-20 sm:min-w-[100px] h-9 sm:h-10 rounded-lg transition-all text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 ${
                 selected
                   ? 'bg-blue-600 text-white ring-blue-500 shadow-md'
                   : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'

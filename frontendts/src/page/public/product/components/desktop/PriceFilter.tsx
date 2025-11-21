@@ -1,35 +1,29 @@
+import { useGetProductList } from '@/hooks/category/useGetProductList.tsx';
+import { useProductParams } from '@/hooks/product/useProductParams.tsx';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useUrlSync } from '../../../../../hooks/common/useUrlSync';
 
 const MAX_PRICE = 50000000;
 
-interface PriceFilterProps {
-  onPriceRangeChange: (minPrice: number, maxPrice: number) => void;
-  initialMinPrice?: number;
-  initialMaxPrice?: number;
-}
-
-const PriceFilter: React.FC<PriceFilterProps> = ({
-  onPriceRangeChange,
-  initialMinPrice,
-  initialMaxPrice,
-}) => {
+const PriceFilter: React.FC = () => {
+  const { filters } = useProductParams();
+  const { handlePriceRangeChange } = useGetProductList();
   const [isOpen, setIsOpen] = useState(false);
-  const [minPrice, setMinPrice] = useState(initialMinPrice || 0);
-  const [maxPrice, setMaxPrice] = useState(initialMaxPrice || MAX_PRICE);
+  const [minPrice, setMinPrice] = useState(filters.min_price || 0);
+  const [maxPrice, setMaxPrice] = useState(filters.max_price || MAX_PRICE);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { updateUrlParams } = useUrlSync();
 
-  // Sync with initial values when props change
+  // Sync with URL params when they change
   useEffect(() => {
-    if (initialMinPrice !== undefined) {
-      setMinPrice(initialMinPrice);
+    if (filters.min_price !== undefined) {
+      setMinPrice(filters.min_price);
     }
-    if (initialMaxPrice !== undefined) {
-      setMaxPrice(initialMaxPrice);
+    if (filters.max_price !== undefined) {
+      setMaxPrice(filters.max_price);
     }
-  }, [initialMinPrice, initialMaxPrice]);
+  }, [filters.min_price, filters.max_price]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,9 +40,9 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
   };
 
   const handleApplyFilter = () => {
-    onPriceRangeChange(minPrice, maxPrice);
+    handlePriceRangeChange(minPrice, maxPrice);
     // Only update URL if values are different from initial values
-    if (minPrice !== (initialMinPrice || 0) || maxPrice !== (initialMaxPrice || MAX_PRICE)) {
+    if (minPrice !== (filters.min_price || 0) || maxPrice !== (filters.max_price || MAX_PRICE)) {
       updateUrlParams({ min_price: minPrice, max_price: maxPrice });
     }
     setIsOpen(false);
@@ -57,7 +51,7 @@ const PriceFilter: React.FC<PriceFilterProps> = ({
   const handleReset = () => {
     setMinPrice(0);
     setMaxPrice(MAX_PRICE);
-    onPriceRangeChange(0, MAX_PRICE);
+    handlePriceRangeChange(0, MAX_PRICE);
     updateUrlParams({ min_price: undefined, max_price: undefined });
   };
 

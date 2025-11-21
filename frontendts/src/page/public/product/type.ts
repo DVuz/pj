@@ -42,4 +42,4 @@ export interface Product {
   subcategory_id: number;
   subcategory_name_vn: string;
   product_type_name_vn: string;
-};
+}

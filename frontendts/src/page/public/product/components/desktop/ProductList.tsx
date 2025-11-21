@@ -1,20 +1,8 @@
 import React from 'react';
 import ProductCard from './ProductCard';
+import type {Product} from '@/types/common.types.ts';
 
 // Use the Product interface from the hook to match the API response
-interface Product {
-  product_id: number;
-  product_name_vn: string;
-  description_vn: string;
-  price: number;
-  category_id: number;
-  subcategory_id: number;
-  product_type_id: number;
-  main_image: string;
-  material_vn: string;
-  color_vn: string;
-  product_type_name_vn: string;
-}
 
 interface ProductListProps {
   products: Product[];

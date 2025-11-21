@@ -206,5 +206,3 @@ export function CategoryTable({
     </div>
   );
 }
-
-export default CategoryTable;
